@@ -1,0 +1,7 @@
+ABSTRACT
+
+The Online Bookstore Management System is a DBMS-based web application developed to automate the process of managing and purchasing books online. The system allows users to register, log in, browse books by category, search for books, add items to cart, place orders, and manage payments. An admin module is also included for managing books, categories, customers, and orders efficiently.
+
+The project is designed using core DBMS concepts such as ER modeling, normalization, primary and foreign keys, joins, views, stored procedures, transactions, and indexing. MySQL is used as the backend database, while PHP, HTML, CSS, and JavaScript are used for frontend and backend integration.
+
+The system ensures data consistency, integrity, and efficient database operations while demonstrating the practical implementation of database management concepts in a real-world e-commerce application.
