@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Patient API</title>
+</head>
+<body>
+
+<h2>Add Patient</h2>
+
+<input id="name" placeholder="Name"><br><br>
+<input id="gender" placeholder="Gender"><br><br>
+<input id="phone" placeholder="Phone"><br><br>
+
+<button onclick="addPatient()">Add Patient</button>
+
+<script>
+async function addPatient() {
+  const name = document.getElementById("name").value;
+  const gender = document.getElementById("gender").value;
+  const phone = document.getElementById("phone").value;
+
+  const res = await fetch("http://localhost:5000/api/patients", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, gender, phone })
+  });
+
+  const data = await res.json();
+  alert(JSON.stringify(data));
+}
+</script>
+
+</body>
+</html>
