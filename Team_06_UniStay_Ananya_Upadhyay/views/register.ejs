@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — UniStay</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-9K0Vj6eiGLRullBxqN5G2LNYTtQ6XnF7/s1UxMkFYS9qC6gzZDhJjVxV5XJ0FzNYkXSLDh7W4t9F1Y4RLd2U8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo unistay-nav">
+      <img src="/images/unistay-logo.png" alt="UniStay" class="nav-logo-img">
+      UniStay
+    </a>
+    <div class="nav-links">
+      <span class="text-muted" style="font-size:0.875rem;">Already registered?</span>
+      <a href="/auth/login" class="btn btn-outline">Sign In</a>
+    </div>
+  </nav>
+
+  <div class="auth-container">
+    <div class="auth-card" style="max-width:520px;">
+      <div class="auth-card-header">
+        <div class="auth-logo">
+          <img src="/images/unistay-logo.png" alt="UniStay" class="auth-logo-img">
+          <span>UniStay</span>
+        </div>
+        <h2>Create your student account</h2>
+        <p>Sign up to find rooms, request a spot, and swap if you need to.</p>
+      </div>
+
+      <% if (error) { %>
+        <div class="alert alert-error"><span><i class="fa-solid fa-triangle-exclamation"></i></span>
+          <%= error %>
+        </div>
+        <% } %>
+
+          <form action="/auth/register" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name" placeholder="Abhinav Sharma" required>
+              </div>
+              <div class="form-group">
+                <label for="contact_number">Phone number</label>
+                <input type="text" id="contact_number" name="contact_number" placeholder="9876543210" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" placeholder="you@college.edu" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Choose a password</label>
+              <input type="password" id="password" name="password" placeholder="At least 6 characters" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="year">Year</label>
+                <select id="year" name="year" required>
+                  <option value="">Select year</option>
+                  <option value="1">1st Year</option>
+                  <option value="2">2nd Year</option>
+                  <option value="3">3rd Year</option>
+                  <option value="4">4th Year</option>
+                  <option value="5">5th Year</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="course">Course / Programme</label>
+              <input type="text" id="course" name="course" placeholder="e.g. B.Tech Computer Science" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:1rem; padding:12px;">
+              Create My Account <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <div class="auth-links">
+            Already have an account? <a href="/auth/login">Sign in instead</a>
+          </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — UniStay</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-9K0Vj6eiGLRullBxqN5G2LNYTtQ6XnF7/s1UxMkFYS9qC6gzZDhJjVxV5XJ0FzNYkXSLDh7W4t9F1Y4RLd2U8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo unistay-nav">
+      <img src="/images/unistay-logo.png" alt="UniStay" class="nav-logo-img">
+      UniStay
+    </a>
+    <div class="nav-links">
+      <span class="text-muted" style="font-size:0.875rem;">New here?</span>
+      <a href="/auth/register" class="btn btn-primary">Create account</a>
+    </div>
+  </nav>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <div class="auth-logo">
+          <img src="/images/unistay-logo.png" alt="UniStay" class="auth-logo-img">
+          <span>UniStay</span>
+        </div>
+        <h2>Welcome back</h2>
+        <p>Log in to check your room status, manage requests, and more.</p>
+      </div>
+
+      <% if (error) { %>
+        <div class="alert alert-error"><span><i class="fa-solid fa-triangle-exclamation"></i></span>
+          <%= error %>
+        </div>
+        <% } %>
+
+          <form action="/auth/login" method="POST">
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" placeholder="you@college.edu" required autofocus>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="Your password" required>
+            </div>
+            <% if (typeof role !== 'undefined' && role === 'admin') { %>
+              <input type="hidden" name="role" value="admin">
+              <div style="text-align:center; margin-bottom: 1rem; color: var(--primary); font-weight: 600;">
+                Warden / Admin Portal Access
+              </div>
+            <% } else { %>
+              <div class="form-group" style="margin-bottom:0.5rem">
+                <label for="role" style="margin-bottom:5px;">I am a</label>
+                <select id="role" name="role" required>
+                  <option value="student">Student</option>
+                  <option value="admin">Admin / Warden</option>
+                </select>
+              </div>
+            <% } %>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.25rem; padding: 12px;">Sign
+              In</button>
+          </form>
+
+          <div class="auth-links">
+            Don't have an account? <a href="/auth/register">Register as student</a>
+          </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

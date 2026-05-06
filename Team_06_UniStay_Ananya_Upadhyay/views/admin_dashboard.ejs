@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — UniStay</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-9K0Vj6eiGLRullBxqN5G2LNYTtQ6XnF7/s1UxMkFYS9qC6gzZDhJjVxV5XJ0FzNYkXSLDh7W4t9F1Y4RLd2U8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="dashboard-shell">
+  <nav class="navbar">
+    <a href="/" class="logo unistay-nav">
+      <img src="/images/unistay-logo.png" alt="UniStay" class="nav-logo-img">
+      UniStay
+    </a>
+    <div class="nav-links">
+      <span class="text-muted"
+        style="font-size:0.8rem; font-weight:600; background:var(--indigo-light); color:var(--indigo); padding:4px 10px; border-radius:99px;">Admin</span>
+      <a href="/auth/logout" class="btn btn-ghost btn-sm">Sign out</a>
+    </div>
+  </nav>
+
+  <div class="dashboard-wrapper">
+    <nav class="sidebar">
+      <a href="/admin/dashboard" class="sidebar-item active">
+        <span class="sidebar-icon"><i class="fa-solid fa-chart-pie"></i></span> Overview
+      </a>
+    </nav>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Admin Dashboard</h1>
+        <p>Review pending allocations, approve room swaps, and monitor occupancy.</p>
+      </div>
+
+      <!-- Occupancy Stats -->
+      <div class="stats-row">
+        <% stats.forEach(stat=> { %>
+          <a href="/admin/hostel/<%= stat.hostel_id %>" class="stat-card"
+            style="text-decoration:none; color:inherit; display:block;">
+            <div class="stat-card-icon"><i class="fa-solid fa-building" style="color:#1e3a5f;"></i></div>
+            <div class="stat-card-label">
+              <%= stat.hostel_name %>
+            </div>
+            <div class="stat-card-value">
+              <%= stat.allocated_students_count %>
+            </div>
+            <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">students allocated</div>
+          </a>
+          <% }) %>
+      </div>
+
+      <!-- Pending Allocations -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <div>
+            <h3>Pending Room Requests</h3>
+            <p>Students who need a room approved</p>
+          </div>
+          <input type="text" class="search-input" placeholder="Search students...">
+        </div>
+        <% if (pendingAllocations.length> 0) { %>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Hostel</th>
+                <th>Room</th>
+                <th>Requested</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% pendingAllocations.forEach(alloc=> { %>
+                <tr>
+                  <td style="color:var(--text-light); font-size:0.8rem;">#<%= alloc.allocation_id %>
+                  </td>
+                  <td style="font-weight:700;">
+                    <%= alloc.student_name %>
+                  </td>
+                  <td>
+                    <%= alloc.hostel_name %>
+                  </td>
+                  <td>
+                    <%= alloc.room_number %>
+                  </td>
+                  <td style="color:var(--text-muted); font-size:0.85rem;">
+                    <%= new Date(alloc.allocation_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) %>
+                  </td>
+                  <td>
+                    <div class="table-actions">
+                      <form action="/admin/allocation/<%= alloc.allocation_id %>/approve" method="POST"
+                        class="confirm-action" data-title="Approve Allocation"
+                        data-desc="Confirm room <%= alloc.room_number %> for <%= alloc.student_name %>? This cannot be undone easily.">
+                        <button class="btn btn-success btn-sm">Approve <i class="fa-solid fa-check"></i></button>
+                      </form>
+                      <form action="/admin/allocation/<%= alloc.allocation_id %>/reject" method="POST"
+                        class="confirm-action" data-type="danger" data-title="Reject Allocation"
+                        data-desc="Are you sure you want to reject <%= alloc.student_name %>'s request?">
+                        <button class="btn btn-danger btn-sm">Reject</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+          <% } else { %>
+            <div class="empty-state">
+              <div class="empty-state-icon"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i></div>
+              <h4>All clear — no pending requests</h4>
+              <p>Every allocation has been reviewed. Check back later.</p>
+            </div>
+            <% } %>
+      </div>
+
+      <!-- Pending Swaps -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <div>
+            <h3>Pending Swap Requests</h3>
+            <p>Students who want to trade rooms with each other</p>
+          </div>
+          <input type="text" class="search-input" placeholder="Search swaps...">
+        </div>
+        <% if (pendingSwaps.length> 0) { %>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>From</th>
+                <th>Wants to swap with</th>
+                <th>Requested</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% pendingSwaps.forEach(swap=> { %>
+                <tr>
+                  <td style="color:var(--text-light); font-size:0.8rem;">#<%= swap.swap_id %>
+                  </td>
+                  <td style="font-weight:700;">
+                    <%= swap.requester_name %><br>
+                      <span style="font-size:0.75rem; font-weight:500; color:var(--text-muted);">
+                        Room <%= swap.requester_room %> (<%= swap.requester_hostel %>)
+                      </span>
+                  </td>
+                  <td style="font-weight:700;">
+                    <%= swap.target_name %><br>
+                      <span style="font-size:0.75rem; font-weight:500; color:var(--text-muted);">
+                        Room <%= swap.target_room %> (<%= swap.target_hostel %>)
+                      </span>
+                  </td>
+                  <td style="color:var(--text-muted); font-size:0.85rem;">
+                    <%= new Date(swap.request_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) %>
+                  </td>
+                  <td>
+                    <div class="table-actions">
+                      <form action="/admin/swap/<%= swap.swap_id %>/approve" method="POST" class="confirm-action"
+                        data-title="Approve Room Swap"
+                        data-desc="Swap rooms between <%= swap.requester_name %> and <%= swap.target_name %>? This is permanent.">
+                        <button class="btn btn-success btn-sm">Approve <i class="fa-solid fa-check"></i></button>
+                      </form>
+                      <form action="/admin/swap/<%= swap.swap_id %>/reject" method="POST" class="confirm-action"
+                        data-type="danger" data-title="Reject Swap"
+                        data-desc="Reject this swap request between <%= swap.requester_name %> and <%= swap.target_name %>?">
+                        <button class="btn btn-danger btn-sm">Reject</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+          <% } else { %>
+            <div class="empty-state">
+              <div class="empty-state-icon"><i class="fa-solid fa-arrow-right-arrow-left" style="color:#1e3a5f;"></i></div>
+              <h4>No swap requests pending</h4>
+              <p>Students haven't initiated any swaps yet.</p>
+            </div>
+            <% } %>
+      </div>
+    </main>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

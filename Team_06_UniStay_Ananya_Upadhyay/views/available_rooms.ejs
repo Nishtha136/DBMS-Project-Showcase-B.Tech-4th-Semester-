@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Rooms — UniStay</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-9K0Vj6eiGLRullBxqN5G2LNYTtQ6XnF7/s1UxMkFYS9qC6gzZDhJjVxV5XJ0FzNYkXSLDh7W4t9F1Y4RLd2U8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo unistay-nav">
+      <img src="/images/unistay-logo.png" alt="UniStay" class="nav-logo-img">
+      UniStay
+    </a>
+    <div class="nav-links">
+      <a href="/student/dashboard" class="btn btn-outline btn-sm"><i class="fa-solid fa-arrow-left"></i> My Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="dashboard-wrapper">
+    <nav class="sidebar">
+      <a href="/student/dashboard" class="sidebar-item">
+        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span> My Dashboard
+      </a>
+      <a href="/student/rooms" class="sidebar-item active">
+        <span class="sidebar-icon"><i class="fa-solid fa-magnifying-glass"></i></span> Browse Rooms
+      </a>
+      <a href="/student/swap" class="sidebar-item">
+        <span class="sidebar-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></span> Request Swap
+      </a>
+    </nav>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Find your room</h1>
+        <p>Only hostels matching your gender are shown. Pick a hostel and room that works for you.</p>
+      </div>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><span><i class="fa-solid fa-triangle-exclamation"></i></span> <%= error %></div>
+      <% } %>
+
+      <div class="section-card">
+        <div class="section-card-header">
+          <div>
+            <h3>Available Beds</h3>
+            <p>Rooms with at least one bed open right now</p>
+          </div>
+          <input type="text" class="search-input" placeholder="Search hostel or room...">
+        </div>
+        <% if (rooms.length > 0) { %>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Hostel</th>
+                <th>Room</th>
+                <th>Capacity</th>
+                <th>Beds Available</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% rooms.forEach(room => { %>
+              <tr>
+                <td style="font-weight:700;"><%= room.hostel_name %></td>
+                <td><%= room.room_number %></td>
+                <td><%= room.capacity %></td>
+                <td><span class="badge badge-success"><%= room.available_beds %> bed<%= room.available_beds > 1 ? 's' : '' %> free</span></td>
+                <td>
+                  <% if (hasAllocation) { %>
+                    <form action="/student/change-room" method="POST" class="confirm-action"
+                      data-title="Confirm Room Change"
+                      data-desc="Move to Room <%= room.room_number %> in <%= room.hostel_name %>? This will instantly change your room.">
+                      <input type="hidden" name="room_id" value="<%= room.room_id %>">
+                      <button class="btn btn-outline btn-sm">Move Here <i class="fa-solid fa-arrow-right"></i></button>
+                    </form>
+                  <% } else { %>
+                    <form action="/student/request-room" method="POST" class="confirm-action"
+                      data-title="Confirm Room Request"
+                      data-desc="Book Room <%= room.room_number %> in <%= room.hostel_name %>? The warden will review and approve.">
+                      <input type="hidden" name="room_id" value="<%= room.room_id %>">
+                      <button class="btn btn-primary btn-sm">Reserve <i class="fa-solid fa-arrow-right"></i></button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div class="empty-state">
+              <div class="empty-state-icon"><i class="fa-solid fa-bed" style="color:#1e3a5f;"></i></div>
+            <h4>No rooms available right now</h4>
+            <p>All beds are currently occupied. Check back soon or speak with the warden.</p>
+          </div>
+        <% } %>
+      </div>
+    </main>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

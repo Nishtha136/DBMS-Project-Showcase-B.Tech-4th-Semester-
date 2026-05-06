@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard — UniStay</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-9K0Vj6eiGLRullBxqN5G2LNYTtQ6XnF7/s1UxMkFYS9qC6gzZDhJjVxV5XJ0FzNYkXSLDh7W4t9F1Y4RLd2U8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="dashboard-shell">
+  <nav class="navbar">
+    <a href="/" class="logo unistay-nav">
+      <img src="/images/unistay-logo.png" alt="UniStay" class="nav-logo-img">
+      UniStay
+    </a>
+    <div class="nav-links">
+      <span class="text-muted" style="font-size:14px; font-weight:600;">
+        <%= user.name %>
+      </span>
+      <div class="user-avatar">
+        <%= user.name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2) %></div>
+      <a href="/auth/logout" class="btn btn-ghost btn-sm">Sign out</a>
+    </div>
+  </nav>
+
+  <div class="dashboard-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-label">Main</div>
+      <a href="/student/dashboard" class="sidebar-item active">
+        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span> My Dashboard
+      </a>
+      <div class="sidebar-label">Rooms</div>
+      <a href="/student/rooms" class="sidebar-item">
+        <span class="sidebar-icon"><i class="fa-solid fa-magnifying-glass"></i></span> Browse Rooms
+      </a>
+      <a href="/student/swap" class="sidebar-item">
+        <span class="sidebar-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></span> Request Swap
+      </a>
+    </nav>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Welcome back, <%= user.name.split(' ')[0] %></h1>
+        <p>Here's what's happening with your room.</p>
+      </div>
+
+      <% if (allocation) { %>
+        <div class="allocation-banner">
+          <div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+              <h3>Your room is confirmed <i class="fa-solid fa-circle-check"></i></h3>
+              <span class="allocation-badge">Approved</span>
+            </div>
+            <p><strong>
+                <%= allocation.hostel_name %>
+              </strong> · Room <strong>
+                <%= allocation.room_number %>
+              </strong> · Since <%= new Date(allocation.allocation_date).toLocaleDateString('en-IN', {day:'numeric',
+                month:'short', year:'numeric'}) %>
+            </p>
+          </div>
+          <a href="/student/swap" class="btn btn-outline"
+            style="background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.3); color:white; white-space:nowrap;">Swap
+            Room <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Roommates Section -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <div>
+              <h3>Your Roommates</h3>
+              <p>Students currently sharing your room</p>
+            </div>
+          </div>
+          <% if (roommates && roommates.length> 0) { %>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Course</th>
+                  <th>Contact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% roommates.forEach(rm=> { %>
+                  <tr>
+                    <td style="font-weight:600;">
+                      <%= rm.name %>
+                    </td>
+                    <td>
+                      <%= rm.course %>
+                    </td>
+                    <td style="color:var(--text-muted);">
+                      <%= rm.contact_number %>
+                    </td>
+                  </tr>
+                  <% }) %>
+              </tbody>
+            </table>
+            <% } else { %>
+              <div class="empty-state">
+                <div class="empty-state-icon"><i class="fa-solid fa-user" style="color:#1e3a5f;"></i></div>
+                <h4>You have the room to yourself</h4>
+                <p>No other students are currently allocated to this room.</p>
+              </div>
+              <% } %>
+        </div>
+        <% } else { %>
+          <div class="section-card" style="border-left: 4px solid var(--warning); margin-bottom:1.75rem;">
+            <div class="section-card-header">
+              <div>
+                <h3>No room yet</h3>
+                <p>You don't have a room yet. Let's find you one.</p>
+              </div>
+              <a href="/student/rooms" class="btn btn-primary">Find a Room <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+          <% } %>
+
+            <div class="section-card">
+              <div class="section-card-header">
+                <div>
+                  <h3>Swap Requests</h3>
+                  <p>Swaps you've initiated or received</p>
+                </div>
+              </div>
+              <% if (swaps && swaps.length> 0) { %>
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Swap ID</th>
+                      <th>Type</th>
+                      <th>With Student</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% swaps.forEach(swap=> { %>
+                      <tr>
+                        <td style="color:var(--text-muted); font-weight:600;">#<%= swap.swap_id %>
+                        </td>
+                        <td>
+                          <span class="badge"
+                            style="background:var(--surface2); color:var(--text); border:1px solid var(--border);">
+                            <%= swap.type==='incoming' ? 'Received' : 'Sent' %>
+                          </span>
+                        </td>
+                        <td style="font-weight:600;">
+                          <%= swap.target_name %>
+                        </td>
+                        <td>
+                          <% if (swap.type==='incoming' && !swap.target_consent && swap.status==='Pending' ) { %>
+                            <span class="badge" style="background:var(--warning-bg); color:var(--warning);">Awaiting
+                              your consent</span>
+                            <% } else if (swap.type==='outgoing' && !swap.target_consent && swap.status==='Pending' ) {
+                              %>
+                              <span class="badge" style="background:var(--surface2); color:var(--text-muted);">Awaiting
+                                their consent</span>
+                              <% } else { %>
+                                <span class="badge badge-<%= swap.status.toLowerCase() %>">
+                                  <%= swap.status %>
+                                </span>
+                                <% } %>
+                        </td>
+                        <td>
+                          <% if (swap.type==='incoming' && !swap.target_consent && swap.status==='Pending' ) { %>
+                            <form action="/student/swap/<%= swap.swap_id %>/consent" method="POST"
+                              style="display:inline-flex; gap:8px;">
+                              <button name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+                              <button name="action" value="decline" class="btn btn-danger btn-sm">Decline</button>
+                            </form>
+                            <% } else { %>
+                              <span style="color:var(--text-light); font-size:0.85rem;">—</span>
+                              <% } %>
+                        </td>
+                      </tr>
+                      <% }) %>
+                  </tbody>
+                </table>
+                <% } else { %>
+                  <div class="empty-state">
+                    <div class="empty-state-icon"><i class="fa-solid fa-arrow-right-arrow-left" style="color:#1e3a5f;"></i></div>
+                    <h4>No swap requests yet</h4>
+                    <p>If you'd like to move to a different room, initiate a swap request.</p>
+                  </div>
+                  <% } %>
+            </div>
+            </main>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniStay | University Housing Management</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-9K0Vj6eiGLRullBxqN5G2LNYTtQ6XnF7/s1UxMkFYS9qC6gzZDhJjVxV5XJ0FzNYkXSLDh7W4t9F1Y4RLd2U8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+
+<body class="home-body">
+
+  <!-- NAVBAR -->
+  <nav class="home-nav" id="homeNav">
+    <div class="home-nav-inner">
+      <a href="/" class="home-nav-logo">
+        <img src="/images/unistay-logo.png" alt="UniStay" class="home-nav-logo-img">
+        <span>UniStay</span>
+      </a>
+      <div class="home-nav-pill">Smart allocation platform</div>
+      <div class="home-nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#testimonials">Reviews</a>
+      </div>
+      <div class="home-nav-cta">
+        <a href="/auth/login" class="hn-login">Sign in</a>
+        <a href="/auth/register" class="hn-register">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </nav>
+  <aside class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-head">
+      <span>UniStay</span>
+      <button class="menu-close" id="menuClose" aria-label="Close menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <a href="#features" class="mobile-menu-link">Features</a>
+    <a href="#how" class="mobile-menu-link">How it works</a>
+    <a href="#testimonials" class="mobile-menu-link">Reviews</a>
+    <div class="mobile-menu-cta">
+      <a href="/auth/login" class="h-btn-ghost">Sign in</a>
+      <a href="/auth/register" class="h-btn-primary">Get Started</a>
+    </div>
+  </aside>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section class="h-hero">
+    <!-- Background elements -->
+    <div id="heroParticles" class="h-particles" aria-hidden="true"></div>
+    <div class="h-bg-grid"></div>
+    <div class="h-bg-blob b1"></div>
+    <div class="h-bg-blob b2"></div>
+    <div class="h-bg-blob b3"></div>
+
+    <div class="h-hero-inner">
+      <div class="h-hero-left">
+        <div class="h-tag">
+          <span class="h-tag-dot"></span>
+          Built for modern universities
+        </div>
+
+        <h1 class="h-hero-title">
+          <span>Smarter campus housing,</span><br>
+          <span>built for scale.</span>
+        </h1>
+
+        <p class="h-hero-sub">
+          UniStay makes it easy for universities to manage student housing.
+          Check room availability in real time, swap rooms hassle-free, and let the system handle the paperwork.
+        </p>
+
+        <div class="h-hero-btns">
+          <a href="/auth/register" class="h-btn-primary">
+            Create your account
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <a href="/auth/login" class="h-btn-ghost">Student / Warden sign in</a>
+        </div>
+
+        <div class="h-hero-unis">
+          <p class="h-unis-label">Designed for modern universities</p>
+          <div class="h-unis-icons">
+            <span class="h-uni-badge"><i class="fa-solid fa-building-columns"></i></span>
+            <span class="h-uni-badge"><i class="fa-solid fa-graduation-cap"></i></span>
+            <span class="h-uni-badge"><i class="fa-solid fa-landmark"></i></span>
+            <span class="h-uni-badge"><i class="fa-solid fa-school"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-hero-right">
+        <!-- Real hostel photo -->
+        <div class="h-photo-wrap">
+          <img src="/images/real.jpg" alt="University Campus Building" class="h-photo">
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="h-scroll-hint">
+      <div class="h-scroll-line"></div>
+      <span>scroll to explore</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       STATS BAR
+  ══════════════════════════════════════ -->
+  <div class="h-stats-bar">
+    <div class="h-stats-inner">
+      <div class="h-stat">
+        <div class="h-stat-num">7</div>
+        <div class="h-stat-label">Hostels connected</div>
+      </div>
+      <div class="h-stat-div"></div>
+      <div class="h-stat">
+        <div class="h-stat-num">240+</div>
+        <div class="h-stat-label">Rooms managed</div>
+      </div>
+      <div class="h-stat-div"></div>
+      <div class="h-stat">
+        <div class="h-stat-num">100%</div>
+        <div class="h-stat-label">Automated approvals</div>
+      </div>
+      <div class="h-stat-div"></div>
+      <div class="h-stat">
+        <div class="h-stat-num">&lt; 2 min</div>
+        <div class="h-stat-label">Average booking time</div>
+      </div>
+    </div>
+  </div>
+  <div class="h-divider"><span></span></div>
+
+  <!-- ══════════════════════════════════════
+       SHOWCASE
+  ══════════════════════════════════════ -->
+  <section class="h-showcase">
+    <div class="h-showcase-inner">
+      <div class="h-showcase-content">
+        <h2>Beautiful, modern living spaces.</h2>
+        <p>Experience world-class facilities and seamless community living powered by UniStay infrastructure.</p>
+      </div>
+      <div class="h-showcase-images">
+        <img src="/images/hostel.png" alt="Hostel Building" class="h-showcase-img">
+        <img src="/images/hostel2.png" alt="Hostel Room" class="h-showcase-img">
+      </div>
+    </div>
+  </section>
+  <!-- ══════════════════════════════════════
+       PROBLEM → SOLUTION
+  ══════════════════════════════════════ -->
+  <section class="h-story">
+    <div class="h-container">
+      <div class="h-story-label">Why we built UniStay</div>
+      <h2 class="h-story-title">
+        Campus housing operations are still<br>
+        <span class="h-underline-red">slowed down by manual processes.</span>
+      </h2>
+      <p class="h-story-sub">We created UniStay to remove queue-based workflows, reduce paperwork errors, and make room
+        allocation transparent for everyone involved.</p>
+
+      <div class="h-story-grid">
+        <div class="h-story-col h-story-before">
+          <div class="h-story-col-header">
+            <span class="h-col-tag before">Before UniStay</span>
+          </div>
+          <ul class="h-story-list">
+            <li>Allotment updates delayed by manual review</li>
+            <li>Physical forms and repeated verification steps</li>
+            <li>Frequent office visits for status follow-up</li>
+            <li>Room swaps handled through informal requests</li>
+            <li>Unclear room availability across hostels</li>
+          </ul>
+        </div>
+
+        <div class="h-story-vs">vs</div>
+
+        <div class="h-story-col h-story-after">
+          <div class="h-story-col-header">
+            <span class="h-col-tag after">With UniStay</span>
+          </div>
+          <ul class="h-story-list">
+            <li>Online booking request in under two minutes</li>
+            <li>Single digital workflow for students and wardens</li>
+            <li>Approval decisions with complete request history</li>
+            <li>Structured room-swap flow with auditability</li>
+            <li>Live occupancy visibility for better planning</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="h-divider"><span></span></div>
+
+  <!-- ══════════════════════════════════════
+       FEATURES
+  ══════════════════════════════════════ -->
+  <section class="h-features" id="features">
+    <div class="h-container">
+      <div class="h-section-header">
+        <div class="h-eyebrow">What's inside</div>
+        <h2>Built for real hostel workflows.</h2>
+        <p>Every module is designed around day-to-day campus operations, from student onboarding to occupancy
+          management.</p>
+      </div>
+
+      <div class="h-feat-grid">
+        <div class="h-feat-card h-feat-large">
+          <div class="h-feat-kicker">Smart allocation</div>
+          <h3>Rule-based room allocation with consistency.</h3>
+          <p>Hostel type constraints, capacity checks, and approval states are enforced by the system so decisions stay
+            fair, traceable, and accurate.</p>
+          <div class="h-feat-visual">
+            <div class="h-mini-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span style="font-weight:700; font-size:13px;">Room 101 · Ratan Tata Boys</span>
+                <span class="badge badge-approved">Approved</span>
+              </div>
+              <div class="h-progress-bar">
+                <div class="h-progress-fill" style="width:70%"></div>
+              </div>
+              <div
+                style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--text-muted)">
+                <span>7 of 10 beds filled</span><span>3 available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="h-feat-card">
+          <div class="h-feat-emoji"><i class="fa-solid fa-arrow-right-arrow-left" style="color:#1e3a5f;"></i></div>
+          <div class="h-feat-kicker">Peer swaps</div>
+          <h3>Swap rooms without chaos.</h3>
+          <p>Students can initiate direct room exchange requests, and wardens can approve them through a single
+            structured review flow.</p>
+        </div>
+
+        <div class="h-feat-card">
+          <div class="h-feat-emoji"><i class="fa-solid fa-chart-bar" style="color:#1e3a5f;"></i></div>
+          <div class="h-feat-kicker">Live data</div>
+          <h3>Availability that's actually accurate.</h3>
+          <p>Room availability updates in real time, so students only see valid options and wardens always work with
+            current occupancy data.</p>
+        </div>
+
+        <div class="h-feat-card">
+          <div class="h-feat-emoji"><i class="fa-solid fa-shield-halved" style="color:#1e3a5f;"></i></div>
+          <div class="h-feat-kicker">Database-level security</div>
+          <h3>Rules enforced where it counts.</h3>
+          <p>Core hostel rules are backed by transactions, constraints, and server-side checks to protect data integrity
+            across operations.</p>
+        </div>
+
+        <div class="h-feat-card">
+          <div class="h-feat-emoji"><i class="fa-solid fa-sliders" style="color:#1e3a5f;"></i></div>
+          <div class="h-feat-kicker">Admin control</div>
+          <h3>One dashboard for everything.</h3>
+          <p>Wardens get one dashboard to review requests, track occupancy trends, and manage room inventory without
+            switching systems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="h-divider"><span></span></div>
+
+  <!-- ══════════════════════════════════════
+       HOW IT WORKS
+  ══════════════════════════════════════ -->
+  <section class="h-how" id="how">
+    <div class="h-container">
+      <div class="h-section-header">
+        <div class="h-eyebrow">How it works</div>
+        <h2>A clear student journey from signup to move-in.</h2>
+      </div>
+      <div class="h-steps">
+        <div class="h-step">
+          <div class="h-step-num">01</div>
+          <div class="h-step-body">
+            <h3>Create your account</h3>
+            <p>Students register once with their profile details and access hostels relevant to their eligibility.</p>
+          </div>
+        </div>
+        <div class="h-step-line"></div>
+        <div class="h-step">
+          <div class="h-step-num">02</div>
+          <div class="h-step-body">
+            <h3>Browse & reserve a room</h3>
+            <p>Browse live room inventory, choose an available option, and submit an allocation request instantly.</p>
+          </div>
+        </div>
+        <div class="h-step-line"></div>
+        <div class="h-step">
+          <div class="h-step-num">03</div>
+          <div class="h-step-body">
+            <h3>Get approved & move in</h3>
+            <p>Wardens review pending requests and confirm allocations digitally, reducing delays and paperwork.</p>
+          </div>
+        </div>
+        <div class="h-step-line"></div>
+        <div class="h-step">
+          <div class="h-step-num">04</div>
+          <div class="h-step-body">
+            <h3>Swap if you need to</h3>
+            <p>If needed, students can request room swaps and track status updates through the same platform.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="h-divider"><span></span></div>
+
+  <!-- ══════════════════════════════════════
+       HOSTELS
+  ══════════════════════════════════════ -->
+  <section class="h-hostels">
+    <div class="h-container">
+      <div class="h-section-header">
+        <div class="h-eyebrow">Connected hostels</div>
+        <h2>All 7 hostels, one system.</h2>
+      </div>
+      <div class="h-hostel-grid">
+        <div class="h-hostel-card boys">
+          <div class="h-hostel-type">Boys</div>
+          <div class="h-hostel-name">Ratan Tata Boys Hostel</div>
+          <div class="h-hostel-meta">AC · 4 floors · 80 rooms</div>
+        </div>
+        <div class="h-hostel-card boys">
+          <div class="h-hostel-type">Boys</div>
+          <div class="h-hostel-name">Bhagat Singh Boys Hostel</div>
+          <div class="h-hostel-meta">Non-AC · 3 floors · 64 rooms</div>
+        </div>
+        <div class="h-hostel-card boys">
+          <div class="h-hostel-type">Boys</div>
+          <div class="h-hostel-name">Vikram Sarabhai Boys Hostel</div>
+          <div class="h-hostel-meta">Non-AC · 3 floors · 48 rooms</div>
+        </div>
+        <div class="h-hostel-card boys">
+          <div class="h-hostel-type">Boys</div>
+          <div class="h-hostel-name">Homi Bhabha Boys Hostel</div>
+          <div class="h-hostel-meta">AC · 2 floors · 32 rooms</div>
+        </div>
+        <div class="h-hostel-card girls">
+          <div class="h-hostel-type">Girls</div>
+          <div class="h-hostel-name">Kalpana Chawla Girls Hostel</div>
+          <div class="h-hostel-meta">AC · 5 floors · 60 rooms</div>
+        </div>
+        <div class="h-hostel-card girls">
+          <div class="h-hostel-type">Girls</div>
+          <div class="h-hostel-name">Gargi Girls Hostel</div>
+          <div class="h-hostel-meta">Non-AC · 3 floors · 44 rooms</div>
+        </div>
+        <div class="h-hostel-card girls">
+          <div class="h-hostel-type">Girls</div>
+          <div class="h-hostel-name">APJ Girls Hostel</div>
+          <div class="h-hostel-meta">AC · 4 floors · 52 rooms</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="h-divider"><span></span></div>
+
+  <!-- ══════════════════════════════════════
+       TESTIMONIALS
+  ══════════════════════════════════════ -->
+  <section class="h-testi" id="testimonials">
+    <div class="h-container">
+      <div class="h-section-header">
+        <div class="h-eyebrow">User feedback</div>
+        <h2>What students and wardens report.</h2>
+      </div>
+      <div class="h-testi-grid">
+        <div class="h-testi-card h-testi-featured">
+          <div class="h-testi-quote">"</div>
+          <p>Earlier, room allotment meant multiple office visits and uncertain timelines. With UniStay, I submitted my
+            request online and received approval the same day.</p>
+          <div class="h-testi-author">
+            <div class="h-av h-av-lg" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">AS</div>
+            <div>
+              <div class="h-testi-name">Aarav Sharma</div>
+              <div class="h-testi-role">B.Tech CSE, 2nd Year</div>
+            </div>
+            <div class="h-testi-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          </div>
+        </div>
+
+        <div class="h-testi-card">
+          <div class="h-testi-quote">"</div>
+          <p>I requested a room swap through the portal and could track every status update. The process was
+            straightforward and much faster than the old approach.</p>
+          <div class="h-testi-author">
+            <div class="h-av" style="background:linear-gradient(135deg,#06b6d4,#3b82f6)">RV</div>
+            <div>
+              <div class="h-testi-name">Riya Verma</div>
+              <div class="h-testi-role">B.Tech ECE, 3rd Year</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="h-testi-card">
+          <div class="h-testi-quote">"</div>
+          <p>As a warden, this platform has reduced manual paperwork significantly. I can review requests, monitor
+            occupancy, and take decisions from one dashboard.</p>
+          <div class="h-testi-author">
+            <div class="h-av" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">MS</div>
+            <div>
+              <div class="h-testi-name">Dr. Meena Sharma</div>
+              <div class="h-testi-role">Warden, Boys Hostel Block</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       CTA
+  ══════════════════════════════════════ -->
+  <section class="h-cta">
+    <div class="h-container">
+      <div class="h-cta-inner">
+        <div class="h-cta-bg-blob"></div>
+        <div class="h-eyebrow" style="color:rgba(255,255,255,0.6);">Ready to modernize your hostel process?</div>
+        <h2 class="h-cta-title">Upgrade your campus infrastructure today.</h2>
+        <p class="h-cta-sub">Join the growing number of campuses that use UniStay to simplify room allocation,
+          cut admin overhead, and give students a smoother experience.</p>
+        <div class="h-cta-btns">
+          <a href="/auth/register" class="h-cta-btn-primary">Get Started Now</a>
+          <a href="/auth/login?role=admin" class="h-cta-btn-ghost">Access Staff Portal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="h-footer">
+    <div class="h-container">
+      <div class="h-footer-inner">
+        <div class="h-footer-brand">
+          <img src="/images/unistay-logo.png" alt="UniStay" class="h-footer-logo-img">
+          <span class="h-footer-name">UniStay</span>
+          <span class="h-footer-desc">University Room Allocation &amp; Swap Management</span>
+        </div>
+        <div class="h-footer-right">
+          <p>Advanced DBMS Project &copy; 2026</p>
+          <p style="color:var(--text-light); font-size:13px; margin-top:2px;">Built with Node.js, MySQL & EJS</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    const revealElements = document.querySelectorAll('.h-feat-card, .h-testi-card, .h-step, .h-hostel-card, .h-story-col, .h-stat');
+    revealElements.forEach((el, index) => {
+      el.classList.add('reveal-up');
+      el.style.transitionDelay = `${Math.min(index * 0.04, 0.38)}s`;
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('in-view');
+      });
+    }, { threshold: 0.12 });
+    revealElements.forEach((el) => io.observe(el));
+
+    const nav = document.getElementById('homeNav');
+    const onScroll = () => nav.classList.toggle('nav-scrolled', window.scrollY > 18);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const menuToggle = document.getElementById('menuToggle');
+    const menuClose = document.getElementById('menuClose');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+    const closeMenu = () => {
+      mobileMenu.classList.remove('open');
+      mobileMenuBackdrop.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open');
+    };
+    const openMenu = () => {
+      mobileMenu.classList.add('open');
+      mobileMenuBackdrop.classList.add('open');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('menu-open');
+    };
+    if (menuToggle) menuToggle.addEventListener('click', () => mobileMenu.classList.contains('open') ? closeMenu() : openMenu());
+    if (menuClose) menuClose.addEventListener('click', closeMenu);
+    if (mobileMenuBackdrop) mobileMenuBackdrop.addEventListener('click', closeMenu);
+    document.querySelectorAll('.mobile-menu-link').forEach((link) => link.addEventListener('click', closeMenu));
+
+    const photoWrap = document.querySelector('.h-photo-wrap');
+    const blobs = document.querySelectorAll('.h-bg-blob');
+    let mouseX = 0;
+    let mouseY = 0;
+    let scrollShift = 0;
+    const paintHeroTransform = () => {
+      if (!photoWrap) return;
+      photoWrap.style.transform = `rotateY(${mouseX * 4}deg) rotateX(${mouseY * -3}deg) translateY(${scrollShift}px)`;
+    };
+    if (photoWrap && window.matchMedia('(min-width: 1025px)').matches) {
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX / window.innerWidth - 0.5);
+        mouseY = (event.clientY / window.innerHeight - 0.5);
+        paintHeroTransform();
+        blobs.forEach((blob, idx) => {
+          const speed = (idx + 1) * 8;
+          blob.style.transform = `translate(${mouseX * speed}px, ${mouseY * speed}px)`;
+        });
+      });
+      window.addEventListener('scroll', () => {
+        scrollShift = Math.min(window.scrollY * 0.08, 28);
+        paintHeroTransform();
+      }, { passive: true });
+    }
+
+    const particlesRoot = document.getElementById('heroParticles');
+    if (particlesRoot) {
+      for (let i = 0; i < 18; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'h-particle';
+        dot.style.left = `${Math.random() * 100}%`;
+        dot.style.top = `${Math.random() * 100}%`;
+        dot.style.animationDelay = `${Math.random() * 4}s`;
+        dot.style.animationDuration = `${3 + Math.random() * 4}s`;
+        particlesRoot.appendChild(dot);
+      }
+    }
+
+    document.querySelectorAll('.h-btn-primary, .h-btn-ghost, .hn-register, .h-cta-btn-primary, .h-cta-btn-ghost').forEach((btn) => {
+      btn.addEventListener('click', function (event) {
+        const circle = document.createElement('span');
+        circle.className = 'btn-ripple';
+        const rect = this.getBoundingClientRect();
+        circle.style.left = `${event.clientX - rect.left}px`;
+        circle.style.top = `${event.clientY - rect.top}px`;
+        this.appendChild(circle);
+        setTimeout(() => circle.remove(), 500);
+      });
+    });
+  </script>
+</body>

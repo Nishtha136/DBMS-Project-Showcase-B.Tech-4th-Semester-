@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: hostel_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: hostel_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Automatically initialize database with scripts
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      - ./db/advanced.sql:/docker-entrypoint-initdb.d/2_advanced.sql
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/3_seed.sql
+    restart: always
+
+volumes:
+  postgres_data:

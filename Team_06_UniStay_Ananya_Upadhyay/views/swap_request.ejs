@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Swap — UniStay</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-9K0Vj6eiGLRullBxqN5G2LNYTtQ6XnF7/s1UxMkFYS9qC6gzZDhJjVxV5XJ0FzNYkXSLDh7W4t9F1Y4RLd2U8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo unistay-nav">
+      <img src="/images/unistay-logo.png" alt="UniStay" class="nav-logo-img">
+      UniStay
+    </a>
+    <div class="nav-links">
+      <a href="/student/dashboard" class="btn btn-ghost btn-sm"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+  </nav>
+
+  <div class="dashboard-wrapper">
+    <nav class="sidebar">
+      <a href="/student/dashboard" class="sidebar-item">
+        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span> My Dashboard
+      </a>
+      <a href="/student/rooms" class="sidebar-item">
+        <span class="sidebar-icon"><i class="fa-solid fa-magnifying-glass"></i></span> Browse Rooms
+      </a>
+      <a href="/student/swap" class="sidebar-item active">
+        <span class="sidebar-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></span> Request Swap
+      </a>
+    </nav>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1>Request a room swap</h1>
+        <p>Pick a student you'd like to trade rooms with. Only students of the same gender are shown.</p>
+      </div>
+
+      <div class="swap-container">
+        <div class="swap-card">
+          <% if (students.length > 0) { %>
+            <form action="/student/swap" method="POST" class="confirm-action"
+              data-title="Send Swap Request"
+              data-desc="Your request will be sent to the warden for approval. The other student will be notified.">
+              <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="target_student_id">Choose a student to swap with</label>
+                <select id="target_student_id" name="target_student_id" required>
+                  <option value="" disabled selected>— Pick a roommate —</option>
+                  <% students.forEach(student => { %>
+                    <option value="<%= student.student_id %>">
+                      <%= student.name %> · <%= student.hostel_name %>, Room <%= student.room_number %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary" style="padding: 11px 24px;">
+                Send Swap Request <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </form>
+          <% } else { %>
+            <div class="empty-state" style="padding: 2rem 1rem;">
+              <div class="empty-state-icon"><i class="fa-solid fa-users" style="color:#1e3a5f;"></i></div>
+              <h4>No one to swap with right now</h4>
+              <p>There are no other students with approved allocations in your hostel type yet.</p>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="section-card" style="margin-top: 1.5rem; background: var(--indigo-light); border-color: rgba(79,70,229,0.15);">
+          <div style="padding: 1.25rem 1.5rem;">
+            <p style="font-size:0.875rem; color:var(--indigo); font-weight:600; line-height:1.6;">
+              <i class="fa-solid fa-circle-info"></i> <strong>How swaps work:</strong> Once you send a request, the warden reviews it. If both parties have valid allocations in compatible rooms, the swap is approved and your rooms are exchanged automatically.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>
