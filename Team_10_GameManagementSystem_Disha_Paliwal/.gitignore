@@ -1,0 +1,7 @@
+bin/
+obj/
+*.py
+*.ps1
+*.user
+
+.vs/
