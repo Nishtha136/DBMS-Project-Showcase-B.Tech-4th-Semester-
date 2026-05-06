@@ -1,0 +1,4 @@
+VoteFlix is a web-based movie awards voting platform where users can nominate films and cast votes across different categories. It manages data related to movies, people, awards, and votes using a structured database system.
+
+
+
