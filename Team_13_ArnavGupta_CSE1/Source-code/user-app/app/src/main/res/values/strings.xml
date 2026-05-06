@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">StudyLab</string>
+
+    <!-- Auth -->
+    <string name="title_login">Welcome back</string>
+    <string name="title_register">Create account</string>
+    <string name="hint_email">Email address</string>
+    <string name="hint_password">Password</string>
+    <string name="action_login">Log in</string>
+    <string name="action_register">Sign up</string>
+
+    <!-- Vault -->
+    <string name="title_vault">My Vault</string>
+    <string name="tab_subjects">Subjects</string>
+    <string name="tab_links">Links</string>
+    <string name="tab_files">Files</string>
+    <string name="tab_notes">Notes</string>
+
+    <string name="action_new_subject">New Subject</string>
+    <string name="action_add_link">Add Link</string>
+    <string name="action_add_note">Add Note</string>
+
+    <string name="hint_subject_name">Subject name</string>
+    <string name="hint_link_name">Link name</string>
+    <string name="hint_link_url">https://…</string>
+    <string name="hint_note_name">Note name</string>
+    <string name="hint_note_description">Short description (optional)</string>
+
+    <string name="action_create">Create</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_pick_file">Choose file</string>
+
+    <string name="empty_subjects">No subjects yet. Tap + to create one.</string>
+    <string name="empty_links">No links yet.</string>
+    <string name="empty_notes">No notes yet.</string>
+    <string name="accessibility_service_description">Accessibility service for Focus Mode to block distracting apps</string>
+</resources>

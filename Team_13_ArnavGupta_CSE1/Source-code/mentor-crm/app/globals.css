@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-50 text-ink-900 antialiased;
+  font-feature-settings: "cv02","cv03","cv04","cv11";
+}
+
+/* Reset focus styles to a brand-tinted ring. */
+:focus-visible {
+  outline: 2px solid theme('colors.brand.500');
+  outline-offset: 2px;
+}
+
+/* Recharts tooltip overrides */
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+.recharts-default-tooltip {
+  border: 1px solid theme('colors.ink.200') !important;
+  border-radius: 8px !important;
+  box-shadow: theme('boxShadow.card') !important;
+}

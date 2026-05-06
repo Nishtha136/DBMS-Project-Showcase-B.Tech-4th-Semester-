@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginHorizontal="6dp"
+    android:minWidth="64dp"
+    android:background="@drawable/bg_subject_pill_unselected"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/subject_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textColor="@color/text_primary"
+        android:maxLines="1" />
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_cal_cell_default">
+
+    <TextView
+        android:id="@+id/day_number_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="@color/cal_text_primary"
+        android:fontFamily="@font/lexend"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/assessment_dot_view"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:background="@color/cal_text_primary"
+        android:visibility="gone" />
+
+</FrameLayout>

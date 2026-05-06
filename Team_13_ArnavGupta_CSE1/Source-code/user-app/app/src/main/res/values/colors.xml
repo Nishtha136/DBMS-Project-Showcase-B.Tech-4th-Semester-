@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Neutrals -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_color">#F5F8FC</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="divider_line">#E4EAF2</color>
+
+    <!-- Text -->
+    <color name="text_primary">#0F1B2D</color>
+    <color name="text_secondary">#5A6B85</color>
+    <color name="text_hint">#9AA8BD</color>
+
+    <!-- Brand (blue + white) -->
+    <color name="brand_primary">#1E66F5</color>
+    <color name="brand_primary_dark">#1452C7</color>
+    <color name="brand_primary_light">#E8F0FF</color>
+    <color name="brand_accent">#3B82F6</color>
+
+    <!-- FAB accent (screenshot-style teal) -->
+    <color name="accent_fab">#22C1A8</color>
+
+    <!-- Status -->
+    <color name="status_danger">#E53935</color>
+
+    <!-- Bottom nav -->
+    <color name="nav_active">#1E66F5</color>
+    <color name="nav_inactive">#9AA8BD</color>
+
+    <!-- Subject palette — 10 hues. Each has a matching "light" tile tint. -->
+    <color name="subject_c1">#22C1A8</color> <color name="subject_c1_light">#E1F7F2</color> <!-- teal -->
+    <color name="subject_c2">#1E66F5</color> <color name="subject_c2_light">#E8F0FF</color> <!-- blue -->
+    <color name="subject_c3">#F59E0B</color> <color name="subject_c3_light">#FEF3E0</color> <!-- amber -->
+    <color name="subject_c4">#10B981</color> <color name="subject_c4_light">#E4F8F0</color> <!-- emerald -->
+    <color name="subject_c5">#7C3AED</color> <color name="subject_c5_light">#EFE7FD</color> <!-- violet -->
+    <color name="subject_c6">#F43F5E</color> <color name="subject_c6_light">#FDE7EC</color> <!-- rose -->
+    <color name="subject_c7">#F97316</color> <color name="subject_c7_light">#FDECDD</color> <!-- orange -->
+    <color name="subject_c8">#06B6D4</color> <color name="subject_c8_light">#DEF5F9</color> <!-- cyan -->
+    <color name="subject_c9">#0EA5E9</color> <color name="subject_c9_light">#E0F2FC</color> <!-- sky -->
+    <color name="subject_c10">#4F46E5</color> <color name="subject_c10_light">#E7E5FD</color> <!-- indigo -->
+
+    <!-- File-type tints -->
+    <color name="file_pdf">#F43F5E</color>   <color name="file_pdf_light">#FDE7EC</color>
+    <color name="file_doc">#1E66F5</color>   <color name="file_doc_light">#E8F0FF</color>
+    <color name="file_ppt">#F97316</color>   <color name="file_ppt_light">#FDECDD</color>
+    <color name="file_image">#22C1A8</color> <color name="file_image_light">#E1F7F2</color>
+    <color name="file_other">#5A6B85</color> <color name="file_other_light">#EDF1F7</color>
+
+    <!-- Count pill -->
+    <color name="pill_bg">#E8F0FF</color>
+    <color name="pill_text">#1E66F5</color>
+
+    <!-- Legacy aliases so any remaining refs compile -->
+    <color name="primary_blue">#1E66F5</color>
+    <color name="primary_purple">#4F46E5</color>
+    <color name="accent_orange">#F59E0B</color>
+    <color name="add_bg">#E8F0FF</color>
+    <color name="add_text">#1E66F5</color>
+    <color name="badge_orange_bg">#FEF3E0</color>
+    <color name="badge_orange_text">#F59E0B</color>
+    <color name="badge_blue_bg">#E8F0FF</color>
+    <color name="badge_blue_text">#1E66F5</color>
+    <color name="progress_bg">#E4EAF2</color>
+    <color name="subject_physics">#22C1A8</color>
+    <color name="subject_physics_light">#E1F7F2</color>
+    <color name="subject_math">#1E66F5</color>
+    <color name="subject_math_light">#E8F0FF</color>
+    <color name="subject_history">#F59E0B</color>
+    <color name="subject_history_light">#FEF3E0</color>
+    <color name="subject_biology">#10B981</color>
+    <color name="subject_biology_light">#E4F8F0</color>
+    <color name="fab_teal">#22C1A8</color>
+    
+    <!-- Theme colors for Settings -->
+    <color name="theme_blue">#E8F0FF</color>
+    <color name="theme_teal">#E1F7F2</color>
+    <color name="theme_purple">#EFE7FD</color>
+    <color name="theme_green">#E4F8F0</color>
+    <color name="theme_orange">#FEF3E0</color>
+    <color name="theme_red">#FDE7EC</color>
+    
+    <!-- Theme selected/unselected backgrounds -->
+    <color name="theme_selected_background">#E8F0FF</color>
+    <color name="theme_unselected_background">#FFFFFF</color>
+    
+    <!-- Heatmap colors -->
+    <color name="heatmap_0_to_1">#BBDEFB</color>
+    <color name="heatmap_1_to_2">#64B5F6</color>
+    <color name="heatmap_2_to_4">#1976D2</color>
+    <color name="heatmap_4_plus">#0D47A1</color>
+    
+    <!-- Focus mode background -->
+    <color name="focus_mode_background">#0D1B2A</color>
+
+    <!-- Chip states -->
+    <color name="chip_selected">#1E66F5</color>
+    <color name="chip_unselected">#E8F0FF</color>
+
+    <!-- ═══ Study Calendar design tokens ═══ -->
+    <color name="cal_page_bg">#F5F6FA</color>
+    <color name="cal_card_bg">#FFFFFF</color>
+    <color name="cal_card_border">#F1F5F9</color>
+    <color name="cal_divider">#E2E8F0</color>
+    <color name="cal_primary_blue">#2A88CB</color>
+    <color name="cal_blue_10">#1A2A88CB</color>
+    <color name="cal_blue_20">#332A88CB</color>
+    <color name="cal_assessment_orange">#F59E0B</color>
+    <color name="cal_session_teal">#14B8A6</color>
+    <color name="cal_heatmap_navy">#0D3B61</color>
+    <color name="cal_cell_default">#F1F5F9</color>
+    <color name="cal_cell_outside">#F8FAFC</color>
+    <color name="cal_text_primary">#0F172A</color>
+    <color name="cal_text_secondary">#475569</color>
+    <color name="cal_text_muted">#64748B</color>
+    <color name="cal_text_disabled">#94A3B8</color>
+    <color name="cal_text_light">#CBD5E1</color>
+    <color name="cal_text_task">#334155</color>
+    <color name="cal_badge_red">#EF4444</color>
+    <color name="cal_toggle_bg">#80E2E8F0</color>
+    <color name="cal_nav_bg">#F2FFFFFF</color>
+    <color name="cal_topnav_bg">#CCFFFFFF</color>
+    <!-- Heatmap intensity steps (solid approximations of alpha) -->
+    <color name="cal_heat_0">#F1F5F9</color>
+    <color name="cal_heat_1">#1A2A88CB</color>
+    <color name="cal_heat_2">#4D2A88CB</color>
+    <color name="cal_heat_3">#802A88CB</color>
+    <color name="cal_heat_4">#B32A88CB</color>
+    <color name="cal_heat_5">#E62A88CB</color>
+    <color name="cal_heat_6">#0D3B61</color>
+    <!-- Session card bg -->
+    <color name="cal_session_card_bg">#F5F6FA</color>
+    <!-- Orange 20% and 10% -->
+    <color name="cal_orange_20">#33F59E0B</color>
+    <color name="cal_orange_10">#1AF59E0B</color>
+    <color name="cal_teal_20">#3314B8A6</color>
+    <color name="cal_teal_dark">#0D9488</color>
+
+    <!-- ═══ Study Timer design tokens ═══ -->
+    <color name="tmr_page_bg">#F5F6FA</color>
+    <color name="tmr_primary_blue">#2A88CB</color>
+    <color name="tmr_arc_track">#E8F1F8</color>
+    <color name="tmr_glow">#0D2A88CB</color>
+    <color name="tmr_text_primary">#0F172A</color>
+    <color name="tmr_text_secondary">#475569</color>
+    <color name="tmr_text_muted">#64748B</color>
+    <color name="tmr_text_disabled">#94A3B8</color>
+    <color name="tmr_text_light">#CBD5E1</color>
+    <color name="tmr_divider">#E2E8F0</color>
+    <color name="tmr_card_border">#F1F5F9</color>
+    <color name="tmr_focus_bg">#0F172A</color>
+    <color name="tmr_focus_inactive_bg">#334155</color>
+    <color name="tmr_focus_icon_bg">#33FFFFFF</color>
+    <color name="tmr_btn_red">#EF4444</color>
+    <color name="tmr_nav_border">#F6F7F8</color>
+    <color name="tmr_nav_bg">#E6FFFFFF</color>
+</resources>
