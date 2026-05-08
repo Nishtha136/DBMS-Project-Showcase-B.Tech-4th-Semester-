@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Farmer To Buyer Marketplace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f0f7f6, #f4f7ff); 
+            color: #2b3a35; 
+            overflow-x: hidden; 
+        }
+        
+        /* Modern Sidebar - Improved Contrast & Hover */
+        .sidebar { 
+            background-color: #0f291c; /* Darker green for better contrast */
+            min-height: 100vh; 
+            padding: 30px 20px; 
+            color: #fff; 
+            box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+        }
+        .sidebar-brand { 
+            font-size: 19px; 
+            font-weight: 700; 
+            color: #ffffff; 
+            margin-bottom: 45px; 
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.5px 
+                   }
+        .sidebar-brand i { 
+            color: #ffd166; 
+            font-size: 22px;
+        }
+        
+        .menu-btn { 
+            background: transparent; 
+            color: #d1e3da; /* Lighter text color */
+            border: none; 
+            width: 100%; 
+            text-align: left; 
+            padding: 12px 16px; 
+            font-size: 14.5px; 
+            font-weight: 500; 
+            border-radius: 12px; 
+            margin-bottom: 6px; 
+            transition: all 0.3s ease; 
+        }
+        .menu-btn i { margin-right: 12px; font-size: 18px; vertical-align: text-bottom; }
+        .menu-btn:hover { 
+            background: rgba(255, 255, 255, 0.12); 
+            color: #ffffff; 
+            transform: translateX(4px); /* Slight pop-out effect */
+        }
+        
+        .content-area { padding: 40px; }
+        
+        /* Page Header */
+        .page-header { 
+            background: #ffffff; 
+            padding: 24px 32px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(16, 56, 40, 0.04); 
+            margin-bottom: 30px; 
+            border-left: 5px solid #28a745; 
+        }
+        .page-title { font-size: 24px; font-weight: 700; color: #103828; margin-bottom: 6px; }
+        .page-description { color: #647b72; font-size: 15px; margin-bottom: 0; }
+        
+        /* Hero Banner - Improved Alignment */
+        .hero-banner { 
+            background: linear-gradient(135deg, #186b4b, #3dae7d); 
+            border-radius: 20px; 
+            padding: 35px 40px; 
+            color: #fff; 
+            margin-bottom: 35px; 
+            box-shadow: 0 15px 35px rgba(24, 107, 75, 0.2); 
+        }
+        .hero-banner h1 { font-size: clamp(28px, 4vw, 36px); font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; }
+        .hero-banner p { font-size: 16px; color: rgba(255,255,255,0.9); line-height: 1.6; max-width: 800px; }
+        .hero-banner .btn { min-width: 140px; border-radius: 10px; padding: 12px 24px; font-weight: 600; }
+
+        /* Search Cards */
+        .search-card { 
+            background: #ffffff; 
+            border: 1px solid rgba(16, 56, 40, 0.05); 
+            border-radius: 18px; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03); 
+            transition: all 0.3s ease; 
+        }
+        .search-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 40px rgba(16, 56, 40, 0.08); 
+        }
+        .search-card h5 { 
+            font-size: 16px; 
+            font-weight: 700; 
+            color: #103828; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #f0f5f2; 
+            padding-bottom: 15px; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Form elements */
+        .form-control, .form-select { 
+            border-radius: 10px; 
+            border: 1px solid #d1e0d8; 
+            padding: 12px 16px; 
+            font-size: 14px; 
+            background: #fafcfb; 
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
+            background: #fff;
+        }
+        .btn-search { 
+            border-radius: 10px; 
+            font-weight: 600; 
+            padding: 12px 20px; 
+            font-size: 14px; 
+            letter-spacing: 0.3px; 
+            transition: all 0.2s;
+        }
+        .btn-info.btn-search { background: #139673; border-color: #139673; color: #fff; }
+        .btn-info.btn-search:hover { background: #0f7a5d; border-color: #0f7a5d; }
+        .btn-success.btn-search { background: #28a745; border-color: #28a745; color: #fff; }
+        .btn-outline-secondary.btn-search { color: #3d5c50; border-color: #c9d6d0; }
+        .btn-outline-secondary.btn-search:hover { background: #f0f5f2; color: #103828; }
+        .btn-light.btn-search { background: #ffffff; color: #186b4b; border-color: #ffffff; }
+        .btn-light.btn-search:hover { background: #f8fbf9; transform: scale(1.02); }
+        .btn-outline-light.btn-search:hover { background: rgba(255,255,255,0.1); transform: scale(1.02); }
+        
+        /* Data Table */
+        .table-container { 
+            background: #fff; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(16, 56, 40, 0.04); 
+            overflow: hidden; 
+            padding: 28px; 
+        }
+        .table { margin-bottom: 0; font-size: 14.5px; }
+        .table thead th { 
+            border-bottom: 2px solid #e2ece7; 
+            color: #587365; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            font-size: 12px; 
+            padding: 16px 14px; 
+            letter-spacing: 0.5px; 
+            background: #fafcfb;
+        }
+        .table td { 
+            padding: 18px 14px; 
+            vertical-align: middle; 
+            border-bottom: 1px solid #f0f5f2; 
+            color: #2b3a35; 
+            font-weight: 500;
+        }
+        .table-hover tbody tr:hover { background-color: #f7faf8; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        
+        <div class="col-md-3 col-lg-2 sidebar d-flex flex-column">
+            <div class="sidebar-brand"><i class="bi bi-shop-window"></i> <span>Marketplace</span></div>
+            
+            <div class="text-uppercase text-muted mb-2 ms-3" style="font-size: 11px; font-weight: 700; letter-spacing: 1.2px; opacity: 0.7;">Navigation</div>
+            <form action="/admin"><button class="menu-btn"><i class="bi bi-grid-1x2"></i> Dashboard</button></form>
+
+            <div class="text-uppercase text-muted mt-4 mb-2 ms-3" style="font-size: 11px; font-weight: 700; letter-spacing: 1.2px; opacity: 0.7;">Users</div>
+            <form action="/buyers"><button class="menu-btn"><i class="bi bi-people"></i> All Buyers</button></form>
+            <form action="/farmers"><button class="menu-btn"><i class="bi bi-person-badge"></i> All Farmers</button></form>
+            
+            <div class="text-uppercase text-muted mt-4 mb-2 ms-3" style="font-size: 11px; font-weight: 700; letter-spacing: 1.2px; opacity: 0.7;">Marketplace</div>
+            <form action="/products"><button class="menu-btn"><i class="bi bi-box-seam"></i> Products</button></form>
+            <form action="/orders"><button class="menu-btn"><i class="bi bi-receipt"></i> Orders</button></form>
+            <form action="/delivery"><button class="menu-btn"><i class="bi bi-truck"></i> Deliveries</button></form>
+            <form action="/payment"><button class="menu-btn"><i class="bi bi-credit-card"></i> Payments</button></form>
+
+            <div class="text-uppercase text-muted mt-4 mb-2 ms-3" style="font-size: 11px; font-weight: 700; letter-spacing: 1.2px; opacity: 0.7;">Reports</div>
+            <form action="/sales"><button class="menu-btn"><i class="bi bi-graph-up"></i> Revenue</button></form>
+            
+            <div class="mt-auto pt-4">
+                <a href="/logout" class="menu-btn text-danger text-decoration-none d-block border-top border-secondary pt-3" style="border-color: rgba(255,255,255,0.1) !important;"><i class="bi bi-box-arrow-left"></i> Sign Out</a>
+            </div>
+        </div>
+
+        <div class="col-md-9 col-lg-10 content-area">
+            
+            {% if is_home %}
+            <div class="hero-banner">
+                <!-- Flex-lg-row ensures side-by-side on desktop, stacked on mobile. Align-items-center fixes vertical alignment -->
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4">
+                    <div class="flex-grow-1 pe-lg-4">
+                        <h1>Farmer To Buyer Marketplace</h1>
+                        <p class="mb-0">Welcome to the marketplace control center. Manage inventory, orders, deliveries, payments, and revenue from a unified dashboard designed for direct farm-to-market operations.</p>
+                    </div>
+                    <div class="d-flex gap-3 flex-shrink-0">
+                        <a href="/products" class="btn btn-light btn-search text-nowrap">Browse Products</a>
+                        <a href="/orders" class="btn btn-outline-light btn-search text-nowrap">View Orders</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="page-header">
+                <h2 class="page-title">{{ title }}</h2>
+                <p class="page-description">{{ description }}</p>
+            </div>
+
+            {% if filters %}
+            <div class="search-card p-4 mb-4 border-top border-4 border-info">
+                <h5><i class="bi bi-funnel-fill text-info fs-5"></i> Filters</h5>
+                <form action="{{ filters.action }}" method="GET" class="row g-3 align-items-end">
+                    {% for field in filters.fields %}
+                        <div class="col-md-3">
+                            {% if field.type == 'select' %}
+                                <label class="form-label text-muted fw-bold" style="font-size: 12px;" for="{{ field.name }}">{{ field.label }}</label>
+                                <select id="{{ field.name }}" name="{{ field.name }}" class="form-select">
+                                    {% if field.include_empty %}
+                                        <option value="">{{ field.include_empty }}</option>
+                                    {% endif %}
+                                    {% for opt in field.options %}
+                                        <option value="{{ opt[field.option_key] }}" {% if opt[field.option_key] == field.value %}selected{% endif %}>{{ opt[field.option_key] }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% else %}
+                                <label class="form-label text-muted fw-bold" style="font-size: 12px;" for="{{ field.name }}">{{ field.label }}</label>
+                                <input
+                                    id="{{ field.name }}"
+                                    name="{{ field.name }}"
+                                    type="{{ field.type }}"
+                                    class="form-control"
+                                    value="{{ field.value }}"
+                                    {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %}
+                                    {% if field.step %}step="{{ field.step }}"{% endif %}
+                                >
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <div class="col-12 text-end mt-4">
+                        <a href="{{ filters.action }}" class="btn btn-outline-secondary btn-search me-2">Reset</a>
+                        <button type="submit" class="btn btn-info btn-search">Apply Filters</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            {% if is_home %}
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="search-card p-4 border-top border-4 border-success h-100">
+                        <h5><i class="bi bi-person-lines-fill text-success fs-5"></i> Farmer Lookup</h5>
+                        <form action="/search_farmer" method="GET" class="mt-3">
+                            <select name="search_by" class="form-select mb-3">
+                                <option value="name">Search by Name</option>
+                                <option value="id">Search by ID</option>
+                            </select>
+                            <input type="text" name="query" class="form-control mb-4" placeholder="Enter details..." required>
+                            <button type="submit" class="btn btn-success btn-search w-100">Search System</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="search-card p-4 border-top border-4 border-primary h-100">
+                        <h5><i class="bi bi-person-check-fill text-primary fs-5"></i> Buyer Lookup</h5>
+                        <form action="/search_buyer" method="GET" class="mt-3">
+                            <select name="search_by" class="form-select mb-3">
+                                <option value="name">Search by Name</option>
+                                <option value="id">Search by ID</option>
+                            </select>
+                            <input type="text" name="query" class="form-control mb-4" placeholder="Enter details..." required>
+                            <button type="submit" class="btn btn-primary btn-search w-100">Search System</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="search-card p-4 border-top border-4 border-warning h-100">
+                        <h5><i class="bi bi-box-seam-fill text-warning fs-5"></i> Order Tracking</h5>
+                        <form action="/search_order" method="GET" class="mt-3">
+                            <label class="form-label text-muted fw-bold mb-2" style="font-size: 12px;">Requires exact Order ID</label>
+                            <input type="number" name="query" class="form-control mb-4" placeholder="e.g. 1042" required>
+                            <button type="submit" class="btn btn-warning btn-search w-100 text-dark">Track Order</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if data %}
+            <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0 fw-bold" style="font-size: 18px; color: #103828;">Data Records</h5>
+                    <div class="input-group" style="width: 280px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-radius: 10px;">
+                        <span class="input-group-text bg-white border-end-0 text-muted px-3" style="border-radius: 10px 0 0 10px;"><i class="bi bi-search" style="font-size: 14px;"></i></span>
+                        <input type="text" id="tableSearch" class="form-control border-start-0 ps-0" placeholder="Filter records..." style="font-size: 14px;" onkeyup="filterTable()">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover" id="dataTable">
+                        <thead>
+                            <tr>
+                                {% for key in data[0].keys() %}
+                                    <th>{{ key }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in data %}
+                                <tr>
+                                    {% for value in row.values() %}
+                                        <td>{{ value }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% elif data == [] %}
+                <div class="alert alert-secondary border-0 shadow-sm d-flex align-items-center p-4" style="border-radius: 16px; background: #fff;">
+                    <i class="bi bi-info-circle-fill text-secondary fs-4 me-3"></i> 
+                    <span class="fs-6 fw-medium">No records match your current query.</span>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .query-toast {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background: #fff;
+        border-left: 5px solid #0d6efd;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        max-width: 650px;
+        width: 90%;
+        z-index: 9999;
+        animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+    .query-toast.hide { animation: slideOut 0.3s ease-in-out forwards; }
+    .query-toast-title { font-size: 15px; font-weight: 700; color: #0d6efd; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .query-toast-query { font-size: 13px; background: #f8f9fa; padding: 16px; border-radius: 8px; border: 1px solid #e9ecef; font-family: 'Courier New', monospace; color: #333; margin-bottom: 15px; max-height: 150px; overflow-y: auto; line-height: 1.6; }
+    .query-toast-explanation { font-size: 14px; color: #444; line-height: 1.6; }
+    .toast-close-btn { background: none; border: none; font-size: 24px; color: #adb5bd; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s; }
+    .toast-close-btn:hover { color: #333; }
+</style>
+<script>
+    let lastQueryCode = null;
+
+    function showQueryToast(queryCode, explanation, rowCount, executedTime) {
+        if (lastQueryCode === queryCode) return;
+        lastQueryCode = queryCode;
+
+        const container = document.body;
+        
+        const oldToast = document.querySelector('.query-toast');
+        if (oldToast) {
+            oldToast.remove();
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = 'query-toast';
+        toast.innerHTML = `
+            <div class="query-toast-title">
+                <span>Query Executed</span>
+                <button class="toast-close-btn" onclick="this.closest('.query-toast').remove()">&times;</button>
+            </div>
+            <div class="query-toast-query">${escapeHtml(queryCode)}</div>
+        
+            <div class="text-muted mt-3 pt-2 border-top d-flex align-items-center gap-3" style="font-size: 12px;">
+                <span><i class="bi bi-table me-1"></i> ${rowCount} rows</span>
+                <span><i class="bi bi-clock me-1"></i> ${executedTime}</span>
+            </div>
+        `;
+        
+        container.appendChild(toast);
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function loadQueryDetails() {
+        fetch('/api/query_details')
+            .then(response => response.json())
+            .then(data => {
+                if (data.query_code) {
+                    showQueryToast(data.query_code, data.query_explanation, data.rows_returned, data.executed_at);
+                }
+            })
+            .catch(error => console.error('Error loading query details:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadQueryDetails();
+        setInterval(loadQueryDetails, 2000);
+    });
+
+    function filterTable() {
+        let input = document.getElementById("tableSearch");
+        let filter = input.value.toLowerCase();
+        let table = document.getElementById("dataTable");
+        if (!table) return; 
+        
+        let tr = table.getElementsByTagName("tr");
+        for (let i = 1; i < tr.length; i++) {
+            let rowText = tr[i].innerText || tr[i].textContent;
+            if (rowText.toLowerCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
+</body>
+</html>
