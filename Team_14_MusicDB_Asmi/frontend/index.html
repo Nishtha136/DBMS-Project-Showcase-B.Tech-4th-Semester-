@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Streaming DB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">Music Streaming DB</div>
+    <nav>
+        <a href="#schema">Schema</a>
+        <a href="#queries">Queries</a>
+        <a href="#optimization">Optimization</a>
+        <a href="#live">Live Data</a>
+        <a href="#manage">Manage</a>
+    </nav>
+</header>
+
+<div class="hero">
+    <h1>Music Streaming Platform</h1>
+    <p>DBMS Final Project &mdash; MySQL + Node.js + HTML/CSS/JS</p>
+</div>
+
+<section id="schema">
+    <div class="container">
+        <h2>Schema Overview</h2>
+        <p>11 tables. M:N relationships use bridge tables.</p>
+        <div class="table-grid">
+            <div class="schema-card">
+                <div class="card-title">User</div>
+                <ul>
+                    <li><span class="pk">PK</span> UserID</li>
+                    <li>Name</li>
+                    <li>Email (UNIQUE)</li>
+                    <li>Password</li>
+                    <li>JoiningDate</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Subscription</div>
+                <ul>
+                    <li><span class="pk">PK</span> SubscriptionID</li>
+                    <li><span class="fk">FK</span> UserID</li>
+                    <li>PlanType</li>
+                    <li>StartDate</li>
+                    <li>EndDate</li>
+                    <li>Status</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Payment</div>
+                <ul>
+                    <li><span class="pk">PK</span> PaymentID</li>
+                    <li><span class="fk">FK</span> SubscriptionID</li>
+                    <li>Amount</li>
+                    <li>PaymentDate</li>
+                    <li>PaymentMethod</li>
+                    <li>Status</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Artist</div>
+                <ul>
+                    <li><span class="pk">PK</span> ArtistID</li>
+                    <li>ArtistName</li>
+                    <li>Country</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Album</div>
+                <ul>
+                    <li><span class="pk">PK</span> AlbumID</li>
+                    <li><span class="fk">FK</span> ArtistID</li>
+                    <li>AlbumName</li>
+                    <li>ReleaseYear</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Song</div>
+                <ul>
+                    <li><span class="pk">PK</span> SongID</li>
+                    <li><span class="fk">FK</span> AlbumID (nullable)</li>
+                    <li>Title</li>
+                    <li>Duration</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Genre</div>
+                <ul>
+                    <li><span class="pk">PK</span> GenreID</li>
+                    <li>GenreName (UNIQUE)</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Song_Genre (Bridge)</div>
+                <ul>
+                    <li><span class="fk">FK</span> SongID</li>
+                    <li><span class="fk">FK</span> GenreID</li>
+                    <li>Composite PK</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Playlist</div>
+                <ul>
+                    <li><span class="pk">PK</span> PlaylistID</li>
+                    <li><span class="fk">FK</span> UserID</li>
+                    <li>PlaylistName</li>
+                    <li>CreatedDate</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">Playlist_Song (Bridge)</div>
+                <ul>
+                    <li><span class="fk">FK</span> PlaylistID</li>
+                    <li><span class="fk">FK</span> SongID</li>
+                    <li>AddedOn</li>
+                </ul>
+            </div>
+            <div class="schema-card">
+                <div class="card-title">ListeningHistory</div>
+                <ul>
+                    <li><span class="pk">PK</span> HistoryID</li>
+                    <li><span class="fk">FK</span> UserID</li>
+                    <li><span class="fk">FK</span> SongID</li>
+                    <li>PlayedAt</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="queries">
+    <div class="container">
+        <h2>SQL Queries</h2>
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab(event,'t-basic')">Basic</button>
+            <button class="tab-btn" onclick="switchTab(event,'t-joins')">Joins</button>
+            <button class="tab-btn" onclick="switchTab(event,'t-group')">Group By</button>
+            <button class="tab-btn" onclick="switchTab(event,'t-sub')">Subqueries</button>
+            <button class="tab-btn" onclick="switchTab(event,'t-func')">Functions</button>
+            <button class="tab-btn" onclick="switchTab(event,'t-views')">Views</button>
+        </div>
+
+        <div id="t-basic" class="tab-content active">
+            <div class="query-grid">
+                <div class="qcard" onclick="openModal('q1')"><div class="qtitle">List All Users</div><div class="qtag">SELECT</div></div>
+                <div class="qcard" onclick="openModal('q2')"><div class="qtitle">Active Subscriptions</div><div class="qtag">WHERE</div></div>
+                <div class="qcard" onclick="openModal('q3')"><div class="qtitle">Songs with Duration in Minutes</div><div class="qtag">Scalar Functions</div></div>
+                <div class="qcard" onclick="openModal('q4')"><div class="qtitle">Artists from India</div><div class="qtag">WHERE</div></div>
+                <div class="qcard" onclick="openModal('q5')"><div class="qtitle">Songs Released After 2015</div><div class="qtag">JOIN + WHERE</div></div>
+            </div>
+        </div>
+
+        <div id="t-joins" class="tab-content">
+            <div class="query-grid">
+                <div class="qcard" onclick="openModal('q6')"><div class="qtitle">Songs with Album and Artist</div><div class="qtag">INNER JOIN</div></div>
+                <div class="qcard" onclick="openModal('q7')"><div class="qtitle">All Songs including Singles</div><div class="qtag">LEFT JOIN</div></div>
+                <div class="qcard" onclick="openModal('q8')"><div class="qtitle">All Artists even no Songs</div><div class="qtag">RIGHT JOIN</div></div>
+                <div class="qcard" onclick="openModal('q9')"><div class="qtitle">User to Playlist to Song</div><div class="qtag">4-Table JOIN</div></div>
+                <div class="qcard" onclick="openModal('q10')"><div class="qtitle">Songs with All Genres</div><div class="qtag">JOIN + GROUP_CONCAT</div></div>
+                <div class="qcard" onclick="openModal('q11')"><div class="qtitle">Full Listening History</div><div class="qtag">5-Table JOIN</div></div>
+                <div class="qcard" onclick="openModal('q12')"><div class="qtitle">User Subscription Payment</div><div class="qtag">3-Table JOIN</div></div>
+            </div>
+        </div>
+
+        <div id="t-group" class="tab-content">
+            <div class="query-grid">
+                <div class="qcard" onclick="openModal('q13')"><div class="qtitle">Songs per Genre</div><div class="qtag">GROUP BY</div></div>
+                <div class="qcard" onclick="openModal('q14')"><div class="qtitle">Artists with more than 1 Album</div><div class="qtag">HAVING</div></div>
+                <div class="qcard" onclick="openModal('q15')"><div class="qtitle">Revenue per Payment Method</div><div class="qtag">GROUP BY + HAVING</div></div>
+                <div class="qcard" onclick="openModal('q16')"><div class="qtitle">Top 5 Most Played Songs</div><div class="qtag">GROUP BY + LIMIT</div></div>
+                <div class="qcard" onclick="openModal('q17')"><div class="qtitle">Active Listeners</div><div class="qtag">COUNT DISTINCT</div></div>
+                <div class="qcard" onclick="openModal('q18')"><div class="qtitle">Avg Subscription Duration</div><div class="qtag">AVG + DATEDIFF</div></div>
+            </div>
+        </div>
+
+        <div id="t-sub" class="tab-content">
+            <div class="query-grid">
+                <div class="qcard" onclick="openModal('q19')"><div class="qtitle">Premium Users</div><div class="qtag">IN Subquery</div></div>
+                <div class="qcard" onclick="openModal('q20')"><div class="qtitle">Songs Not in Any Playlist</div><div class="qtag">NOT IN</div></div>
+                <div class="qcard" onclick="openModal('q21')"><div class="qtitle">Songs Longer than Average</div><div class="qtag">Scalar Subquery</div></div>
+                <div class="qcard" onclick="openModal('q22')"><div class="qtitle">Artist with Most Songs</div><div class="qtag">Subquery in FROM</div></div>
+                <div class="qcard" onclick="openModal('q23')"><div class="qtitle">Users with Failed Payment</div><div class="qtag">EXISTS</div></div>
+                <div class="qcard" onclick="openModal('q24')"><div class="qtitle">Max Payment per Plan</div><div class="qtag">Correlated Subquery</div></div>
+            </div>
+        </div>
+
+        <div id="t-func" class="tab-content">
+            <div class="query-grid">
+                <div class="qcard" onclick="openModal('q25')"><div class="qtitle">Payment Aggregates</div><div class="qtag">COUNT SUM AVG MAX MIN</div></div>
+                <div class="qcard" onclick="openModal('q26')"><div class="qtitle">User String and Date Functions</div><div class="qtag">UPPER LENGTH DATEDIFF</div></div>
+                <div class="qcard" onclick="openModal('q27')"><div class="qtitle">Song Title Manipulation</div><div class="qtag">CONCAT REPLACE</div></div>
+                <div class="qcard" onclick="openModal('q28')"><div class="qtitle">Payment Date Functions</div><div class="qtag">YEAR MONTH DAYNAME</div></div>
+            </div>
+        </div>
+
+        <div id="t-views" class="tab-content">
+            <div class="query-grid">
+                <div class="qcard" onclick="openModal('vw1')"><div class="qtitle">Active Premium Users View</div><div class="qtag">CREATE VIEW</div></div>
+                <div class="qcard" onclick="openModal('vw2')"><div class="qtitle">Song Details View</div><div class="qtag">CREATE VIEW</div></div>
+                <div class="qcard" onclick="openModal('vw3')"><div class="qtitle">Revenue Summary View</div><div class="qtag">CREATE VIEW</div></div>
+                <div class="qcard" onclick="openModal('vw4')"><div class="qtitle">User Playlist Summary View</div><div class="qtag">CREATE VIEW</div></div>
+            </div>
+        </div>
+
+        <div id="qmodal" class="modal hidden">
+            <div class="modal-box">
+                <div class="modal-head">
+                    <span id="modal-title"></span>
+                    <button onclick="closeModal()">X</button>
+                </div>
+                <pre id="modal-sql"></pre>
+                <div id="modal-note" class="modal-note"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="optimization">
+    <div class="container">
+        <h2>Query Optimization</h2>
+        <p>Showing the effect of indexing on ListeningHistory table using EXPLAIN and SHOW PROFILES.</p>
+        <div class="opt-row">
+            <div class="opt-box">
+                <h3>Before Index</h3>
+                <pre>ALTER TABLE ListeningHistory DROP INDEX idx_history_user;
+EXPLAIN SELECT * FROM ListeningHistory WHERE UserID = 3;</pre>
+                <table class="plain-table">
+                    <tr><th>type</th><th>key</th><th>rows</th><th>Extra</th></tr>
+                    <tr><td style="color:red">ALL</td><td>NULL</td><td>150</td><td>Using where</td></tr>
+                </table>
+                <p>Full table scan. MySQL reads every row.</p>
+                <p>Time: ~0.8ms</p>
+            </div>
+            <div class="opt-box">
+                <h3>After Index</h3>
+                <pre>CREATE INDEX idx_history_user ON ListeningHistory(UserID);
+EXPLAIN SELECT * FROM ListeningHistory WHERE UserID = 3;</pre>
+                <table class="plain-table">
+                    <tr><th>type</th><th>key</th><th>rows</th><th>Extra</th></tr>
+                    <tr><td style="color:green">ref</td><td>idx_history_user</td><td>9</td><td>NULL</td></tr>
+                </table>
+                <p>Index scan. MySQL reads only matching rows.</p>
+                <p>Time: ~0.1ms (8x faster)</p>
+            </div>
+        </div>
+        <h3>All Indexes</h3>
+        <table class="plain-table">
+            <tr><th>Index Name</th><th>Table</th><th>Column</th><th>Purpose</th></tr>
+            <tr><td>PRIMARY</td><td>All tables</td><td>ID columns</td><td>Auto on PK</td></tr>
+            <tr><td>idx_song_title</td><td>Song</td><td>Title</td><td>Search by song name</td></tr>
+            <tr><td>idx_artist_name</td><td>Artist</td><td>ArtistName</td><td>Search by artist</td></tr>
+            <tr><td>idx_user_email</td><td>User</td><td>Email</td><td>Login lookup</td></tr>
+            <tr><td>idx_payment_date</td><td>Payment</td><td>PaymentDate</td><td>Date range queries</td></tr>
+            <tr><td>idx_history_user</td><td>ListeningHistory</td><td>UserID</td><td>User history lookup</td></tr>
+            <tr><td>idx_history_song</td><td>ListeningHistory</td><td>SongID</td><td>Play count queries</td></tr>
+        </table>
+    </div>
+</section>
+
+<section id="live">
+    <div class="container">
+        <h2>Live Data</h2>
+        <p>Search and filter data from the database.</p>
+
+        <div class="form-row">
+            <div class="search-box">
+                <label>Search Songs by Artist</label>
+                <div class="input-row">
+                    <input type="text" id="inp-artist" placeholder="e.g. Arijit, Taylor">
+                    <button onclick="searchByArtist()">Search</button>
+                </div>
+                <div id="res-artist" class="result-area"></div>
+            </div>
+            <div class="search-box">
+                <label>Search Songs by Title</label>
+                <div class="input-row">
+                    <input type="text" id="inp-song-title" placeholder="e.g. Tum Hi Ho">
+                    <button onclick="searchByTitle()">Search</button>
+                </div>
+                <div id="res-song-title" class="result-area"></div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="search-box">
+                <label>User Listening History (enter User ID 1-100)</label>
+                <div class="input-row">
+                    <input type="number" id="inp-userid" placeholder="e.g. 1" min="1" max="100">
+                    <button onclick="getUserHistory()">Get History</button>
+                </div>
+                <div id="res-history" class="result-area"></div>
+            </div>
+            <div class="search-box">
+                <label>User Subscription Details (enter User ID)</label>
+                <div class="input-row">
+                    <input type="number" id="inp-sub-userid" placeholder="e.g. 3" min="1" max="100">
+                    <button onclick="getUserSubscription()">Get Details</button>
+                </div>
+                <div id="res-subscription" class="result-area"></div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="search-box">
+                <label>Songs by Genre</label>
+                <div class="input-row">
+                    <select id="inp-genre">
+                        <option value="">Select Genre</option>
+                        <option>Bollywood</option><option>Pop</option><option>Indie</option>
+                        <option>R&B</option><option>Electronic</option><option>Classical</option>
+                        <option>Rock</option><option>Hip-Hop</option><option>Soul</option>
+                        <option>Country</option><option>Dance</option>
+                    </select>
+                    <button onclick="getSongsByGenre()">Search</button>
+                </div>
+                <div id="res-genre" class="result-area"></div>
+            </div>
+            <div class="search-box">
+                <label>Top N Most Played Songs</label>
+                <div class="input-row">
+                    <input type="number" id="inp-topn" placeholder="e.g. 5" min="1" max="50">
+                    <button onclick="getTopSongs()">Get Top Songs</button>
+                </div>
+                <div id="res-topsongs" class="result-area"></div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="search-box">
+                <label>Monthly Revenue (enter year)</label>
+                <div class="input-row">
+                    <input type="number" id="inp-year" placeholder="e.g. 2024" min="2022" max="2026">
+                    <button onclick="getRevenue()">Get Report</button>
+                </div>
+                <div id="res-revenue" class="result-area"></div>
+            </div>
+            <div class="search-box">
+                <label>Artists by Country</label>
+                <div class="input-row">
+                    <select id="inp-country">
+                        <option value="">Select Country</option>
+                        <option>India</option><option>USA</option><option>UK</option>
+                        <option>Canada</option><option>Barbados</option>
+                    </select>
+                    <button onclick="getArtistsByCountry()">Search</button>
+                </div>
+                <div id="res-country" class="result-area"></div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="search-box">
+                <label>Playlists by User ID</label>
+                <div class="input-row">
+                    <input type="number" id="inp-playlist-user" placeholder="e.g. 2" min="1" max="100">
+                    <button onclick="getPlaylistsByUser()">Get Playlists</button>
+                </div>
+                <div id="res-playlists-user" class="result-area"></div>
+            </div>
+            <div class="search-box">
+                <label>Songs in Playlist (enter Playlist ID)</label>
+                <div class="input-row">
+                    <input type="number" id="inp-playlist-id" placeholder="e.g. 2" min="1" max="100">
+                    <button onclick="getSongsInPlaylist()">Get Songs</button>
+                </div>
+                <div id="res-playlist-songs" class="result-area"></div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="search-box">
+                <label>Users by Subscription Plan</label>
+                <div class="input-row">
+                    <select id="inp-plan">
+                        <option value="">Select Plan</option>
+                        <option value="Free">Free</option>
+                        <option value="Basic">Basic</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                    <button onclick="getUsersByPlan()">Search</button>
+                </div>
+                <div id="res-plan" class="result-area"></div>
+            </div>
+            <div class="search-box">
+                <label>Albums by Release Year</label>
+                <div class="input-row">
+                    <input type="number" id="inp-album-year" placeholder="e.g. 2020" min="1970" max="2026">
+                    <button onclick="getAlbumsByYear()">Search</button>
+                </div>
+                <div id="res-albums-year" class="result-area"></div>
+            </div>
+        </div>
+
+        <div class="quick-section">
+            <h3>Quick Queries</h3>
+            <div class="quick-btns">
+                <button onclick="loadData('/api/users','res-quick')">All Users</button>
+                <button onclick="loadData('/api/songs','res-quick')">All Songs</button>
+                <button onclick="loadData('/api/artists','res-quick')">All Artists</button>
+                <button onclick="loadData('/api/genres','res-quick')">Songs per Genre</button>
+                <button onclick="loadData('/api/premium-users','res-quick')">Premium Users</button>
+                <button onclick="loadData('/api/playlists','res-quick')">All Playlists</button>
+                <button onclick="loadData('/api/revenue','res-quick')">Revenue Summary</button>
+                <button onclick="loadData('/api/top-songs/10','res-quick')">Top 10 Songs</button>
+                <button onclick="loadData('/api/failed-payments','res-quick')">Failed Payments</button>
+                <button onclick="loadData('/api/no-playlist-songs','res-quick')">Songs Not in Playlist</button>
+                <button onclick="loadData('/api/active-subs','res-quick')">Active Subscriptions</button>
+            </div>
+            <div id="res-quick" class="result-area"></div>
+        </div>
+
+        <h3 style="margin-top:2rem">JOIN Queries</h3>
+        <div class="quick-btns">
+            <button onclick="loadData('/api/join/songs-album-artist','res-joins')">INNER JOIN - Songs+Album+Artist</button>
+            <button onclick="loadData('/api/join/all-songs-left','res-joins')">LEFT JOIN - All Songs</button>
+            <button onclick="loadData('/api/join/artists-right','res-joins')">RIGHT JOIN - All Artists</button>
+            <button onclick="loadData('/api/join/user-playlist-song','res-joins')">4-Table JOIN</button>
+            <button onclick="loadData('/api/join/genre-count','res-joins')">JOIN + GROUP BY</button>
+            <button onclick="loadData('/api/join/songs-genres-concat','res-joins')">JOIN + GROUP_CONCAT</button>
+            <button onclick="loadData('/api/join/user-sub-payment','res-joins')">3-Table JOIN</button>
+            <button onclick="loadData('/api/join/listening-history','res-joins')">5-Table JOIN</button>
+        </div>
+        <div class="form-row" style="margin-top:1rem">
+            <div class="search-box">
+                <label>JOIN + WHERE: Songs by Artist Country</label>
+                <div class="input-row">
+                    <select id="inp-join-country">
+                        <option value="">Select Country</option>
+                        <option value="India">India</option>
+                        <option value="USA">USA</option>
+                        <option value="UK">UK</option>
+                        <option value="Canada">Canada</option>
+                    </select>
+                    <button onclick="joinByCountry()">Run</button>
+                </div>
+            </div>
+            <div class="search-box">
+                <label>JOIN + HAVING: Artists with Albums >= N</label>
+                <div class="input-row">
+                    <input type="number" id="inp-min-albums" placeholder="Min albums e.g. 1" min="1" max="10">
+                    <button onclick="joinArtistAlbums()">Run</button>
+                </div>
+            </div>
+        </div>
+        <div id="res-joins" class="result-area"></div>
+    </div>
+</section>
+
+<section id="manage">
+    <div class="container">
+        <h2>Manage Data</h2>
+        <p>Insert, update, and delete records in the database.</p>
+
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab(event,'m-insert')">Insert</button>
+            <button class="tab-btn" onclick="switchTab(event,'m-update')">Update</button>
+            <button class="tab-btn" onclick="switchTab(event,'m-delete')">Delete</button>
+        </div>
+
+        <div id="m-insert" class="tab-content active">
+            <div class="form-row">
+                <div class="search-box">
+                    <h3>Add New User</h3>
+                    <label>Name</label>
+                    <input type="text" id="add-user-name" placeholder="Full Name" class="full-input">
+                    <label>Email</label>
+                    <input type="email" id="add-user-email" placeholder="Email" class="full-input">
+                    <label>Password</label>
+                    <input type="password" id="add-user-pass" placeholder="Password" class="full-input">
+                    <label>Joining Date</label>
+                    <input type="date" id="add-user-date" class="full-input">
+                    <button onclick="addUser()" style="margin-top:0.5rem">Add User</button>
+                    <div id="res-add-user" class="result-area"></div>
+                </div>
+                <div class="search-box">
+                    <h3>Add New Artist</h3>
+                    <label>Artist Name</label>
+                    <input type="text" id="add-artist-name" placeholder="Artist Name" class="full-input">
+                    <label>Country</label>
+                    <input type="text" id="add-artist-country" placeholder="Country" class="full-input">
+                    <button onclick="addArtist()" style="margin-top:0.5rem">Add Artist</button>
+                    <div id="res-add-artist" class="result-area"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="search-box">
+                    <h3>Add New Song</h3>
+                    <label>Song Title</label>
+                    <input type="text" id="add-song-title" placeholder="Song Title" class="full-input">
+                    <label>Duration (seconds)</label>
+                    <input type="number" id="add-song-duration" placeholder="e.g. 240" class="full-input">
+                    <label>Album ID (optional)</label>
+                    <input type="number" id="add-song-album" placeholder="Leave blank for single" class="full-input">
+                    <button onclick="addSong()" style="margin-top:0.5rem">Add Song</button>
+                    <div id="res-add-song" class="result-area"></div>
+                </div>
+                <div class="search-box">
+                    <h3>Create Playlist</h3>
+                    <label>Playlist Name</label>
+                    <input type="text" id="add-pl-name" placeholder="Playlist Name" class="full-input">
+                    <label>User ID</label>
+                    <input type="number" id="add-pl-userid" placeholder="e.g. 1" class="full-input">
+                    <button onclick="addPlaylist()" style="margin-top:0.5rem">Create Playlist</button>
+                    <div id="res-add-playlist" class="result-area"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="search-box">
+                    <h3>Add Song to Playlist</h3>
+                    <label>Playlist ID</label>
+                    <input type="number" id="add-ps-playlist" placeholder="Playlist ID" class="full-input">
+                    <label>Song ID</label>
+                    <input type="number" id="add-ps-song" placeholder="Song ID" class="full-input">
+                    <button onclick="addSongToPlaylist()" style="margin-top:0.5rem">Add to Playlist</button>
+                    <div id="res-add-ps" class="result-area"></div>
+                </div>
+                <div class="search-box">
+                    <h3>Log Song Play</h3>
+                    <label>User ID</label>
+                    <input type="number" id="add-play-user" placeholder="User ID" class="full-input">
+                    <label>Song ID</label>
+                    <input type="number" id="add-play-song" placeholder="Song ID" class="full-input">
+                    <button onclick="logPlay()" style="margin-top:0.5rem">Log Play</button>
+                    <div id="res-log-play" class="result-area"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="m-update" class="tab-content">
+            <div class="form-row">
+                <div class="search-box">
+                    <h3>Update Subscription Plan</h3>
+                    <label>User ID</label>
+                    <input type="number" id="upd-sub-user" placeholder="User ID" class="full-input">
+                    <label>New Plan</label>
+                    <select id="upd-sub-plan" class="full-input">
+                        <option value="Free">Free</option>
+                        <option value="Basic">Basic</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                    <button onclick="updateSubscription()" style="margin-top:0.5rem">Update Plan</button>
+                    <div id="res-upd-sub" class="result-area"></div>
+                </div>
+                <div class="search-box">
+                    <h3>Update Artist Country</h3>
+                    <label>Artist ID</label>
+                    <input type="number" id="upd-artist-id" placeholder="Artist ID" class="full-input">
+                    <label>New Country</label>
+                    <input type="text" id="upd-artist-country" placeholder="Country" class="full-input">
+                    <button onclick="updateArtistCountry()" style="margin-top:0.5rem">Update Country</button>
+                    <div id="res-upd-artist" class="result-area"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="m-delete" class="tab-content">
+            <div class="form-row">
+                <div class="search-box">
+                    <h3>Delete User</h3>
+                    <p>Deletes user and all related data (subscriptions, payments, playlists, history) via CASCADE.</p>
+                    <label>User ID</label>
+                    <input type="number" id="del-user-id" placeholder="User ID" class="full-input">
+                    <button onclick="deleteUser()" style="margin-top:0.5rem;background:#c0392b">Delete User</button>
+                    <div id="res-del-user" class="result-area"></div>
+                </div>
+                <div class="search-box">
+                    <h3>Clear Listening History</h3>
+                    <p>Deletes all listening history records for a specific user.</p>
+                    <label>User ID</label>
+                    <input type="number" id="del-history-user" placeholder="User ID" class="full-input">
+                    <button onclick="clearHistory()" style="margin-top:0.5rem;background:#c0392b">Clear History</button>
+                    <div id="res-del-history" class="result-area"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <p>Music Streaming Platform - DBMS Final Project - BML Munjal University</p>
+</footer>
+
+<script>
+const API = 'http://localhost:3000';
+
+function renderTable(id, data) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (!data || data.length === 0) { el.innerHTML = '<p style="color:#888;padding:6px">No results.</p>'; return; }
+    var cols = Object.keys(data[0]);
+    var html = '<table><thead><tr>';
+    cols.forEach(function(c) { html += '<th>' + c + '</th>'; });
+    html += '</tr></thead><tbody>';
+    data.forEach(function(row) {
+        html += '<tr>';
+        cols.forEach(function(c) { html += '<td>' + (row[c] !== null && row[c] !== undefined ? row[c] : '') + '</td>'; });
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+}
+
+async function loadData(endpoint, resultId) {
+    var el = document.getElementById(resultId);
+    if (el) el.innerHTML = '<p style="color:#888;padding:6px">Loading...</p>';
+    try {
+        var res = await fetch(API + endpoint);
+        var data = await res.json();
+        renderTable(resultId, data);
+    } catch(e) {
+        if (el) el.innerHTML = '<p style="color:red;padding:6px">Cannot connect to server. Make sure node server.js is running.</p>';
+    }
+}
+
+async function postData(endpoint, body, resultId) {
+    var el = document.getElementById(resultId);
+    if (el) el.innerHTML = '<p style="color:#888;padding:6px">Processing...</p>';
+    try {
+        var res = await fetch(API + endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        var data = await res.json();
+        if (el) el.innerHTML = '<p class="' + (data.error ? 'msg-err' : 'msg-ok') + '">' + (data.error || data.message) + '</p>';
+    } catch(e) {
+        if (el) el.innerHTML = '<p class="msg-err">Cannot connect to server.</p>';
+    }
+}
+
+async function deleteData(endpoint, resultId) {
+    var el = document.getElementById(resultId);
+    if (el) el.innerHTML = '<p style="color:#888;padding:6px">Processing...</p>';
+    try {
+        var res = await fetch(API + endpoint, { method: 'DELETE' });
+        var data = await res.json();
+        if (el) el.innerHTML = '<p class="' + (data.error ? 'msg-err' : 'msg-ok') + '">' + (data.error || data.message) + '</p>';
+    } catch(e) {
+        if (el) el.innerHTML = '<p class="msg-err">Cannot connect to server.</p>';
+    }
+}
+
+function switchTab(e, id) {
+    var parent = e.target.closest('section') || e.target.closest('.container') || document;
+    var tabs = e.target.parentElement.querySelectorAll('.tab-btn');
+    var contents = e.target.parentElement.parentElement.querySelectorAll('.tab-content');
+    tabs.forEach(function(b) { b.classList.remove('active'); });
+    contents.forEach(function(c) { c.classList.remove('active'); });
+    e.target.classList.add('active');
+    var el = document.getElementById(id);
+    if (el) el.classList.add('active');
+}
+
+const queries = {
+    q1:  { title: 'List All Users', sql: 'SELECT * FROM User;', note: 'Basic SELECT to get all users.' },
+    q2:  { title: 'Active Subscriptions', sql: "SELECT * FROM Subscription WHERE Status = 'Active';", note: 'WHERE clause to filter active subscriptions.' },
+    q3:  { title: 'Songs with Duration in Minutes', sql: 'SELECT SongID, Title, Duration,\n  ROUND(Duration/60,2) AS Duration_Min,\n  UPPER(Title) AS Title_Upper,\n  LENGTH(Title) AS Title_Len\nFROM Song;', note: 'Scalar functions: ROUND, UPPER, LENGTH.' },
+    q4:  { title: 'Artists from India', sql: "SELECT * FROM Artist WHERE Country = 'India';", note: 'Simple WHERE filter.' },
+    q5:  { title: 'Songs Released After 2015', sql: 'SELECT s.Title, a.AlbumName, a.ReleaseYear\nFROM Song s\nJOIN Album a ON s.AlbumID = a.AlbumID\nWHERE a.ReleaseYear > 2015;', note: 'JOIN with WHERE on joined column.' },
+    q6:  { title: 'Songs with Album and Artist', sql: 'SELECT s.Title, a.AlbumName, ar.ArtistName, a.ReleaseYear\nFROM Song s\nINNER JOIN Album a ON s.AlbumID = a.AlbumID\nINNER JOIN Artist ar ON a.ArtistID = ar.ArtistID\nORDER BY ar.ArtistName;', note: '3-table INNER JOIN. Only songs with both album and artist returned.' },
+    q7:  { title: 'All Songs including Singles', sql: "SELECT s.Title,\n  IFNULL(a.AlbumName,'No Album') AS Album,\n  IFNULL(ar.ArtistName,'Unknown') AS Artist\nFROM Song s\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID;", note: 'LEFT JOIN keeps all songs even if AlbumID is NULL.' },
+    q8:  { title: 'All Artists even no Songs', sql: 'SELECT ar.ArtistName, a.AlbumName, s.Title\nFROM Song s\nRIGHT JOIN Album a ON s.AlbumID = a.AlbumID\nRIGHT JOIN Artist ar ON a.ArtistID = ar.ArtistID;', note: 'RIGHT JOIN ensures every artist appears.' },
+    q9:  { title: 'User to Playlist to Song', sql: 'SELECT u.Name, p.PlaylistName, s.Title, ps.AddedOn\nFROM User u\nJOIN Playlist p ON u.UserID = p.UserID\nJOIN Playlist_Song ps ON p.PlaylistID = ps.PlaylistID\nJOIN Song s ON ps.SongID = s.SongID\nORDER BY u.Name;', note: '4-table JOIN traversing User to Song via bridge table.' },
+    q10: { title: 'Songs with All Genres', sql: 'SELECT s.Title,\n  GROUP_CONCAT(g.GenreName SEPARATOR ", ") AS Genres\nFROM Song s\nJOIN Song_Genre sg ON s.SongID = sg.SongID\nJOIN Genre g ON sg.GenreID = g.GenreID\nGROUP BY s.SongID, s.Title;', note: 'GROUP_CONCAT collapses multiple genre rows into one string per song.' },
+    q11: { title: 'Full Listening History', sql: 'SELECT u.Name, s.Title, ar.ArtistName, lh.PlayedAt\nFROM ListeningHistory lh\nJOIN User u ON lh.UserID = u.UserID\nJOIN Song s ON lh.SongID = s.SongID\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nORDER BY lh.PlayedAt DESC;', note: '5-table JOIN showing complete play log.' },
+    q12: { title: 'User Subscription Payment', sql: 'SELECT u.Name, sub.PlanType, p.Amount, p.PaymentMethod, p.PaymentDate\nFROM User u\nJOIN Subscription sub ON u.UserID = sub.UserID\nJOIN Payment p ON sub.SubscriptionID = p.SubscriptionID\nORDER BY p.PaymentDate DESC;', note: '3-table JOIN for billing audit.' },
+    q13: { title: 'Songs per Genre', sql: 'SELECT g.GenreName, COUNT(sg.SongID) AS TotalSongs\nFROM Genre g\nJOIN Song_Genre sg ON g.GenreID = sg.GenreID\nGROUP BY g.GenreID, g.GenreName\nORDER BY TotalSongs DESC;', note: 'GROUP BY with COUNT aggregate.' },
+    q14: { title: 'Artists with more than 1 Album', sql: 'SELECT ar.ArtistName, COUNT(a.AlbumID) AS AlbumCount\nFROM Artist ar\nJOIN Album a ON ar.ArtistID = a.ArtistID\nGROUP BY ar.ArtistID, ar.ArtistName\nHAVING AlbumCount > 1;', note: 'HAVING filters groups after aggregation.' },
+    q15: { title: 'Revenue per Payment Method', sql: "SELECT PaymentMethod, COUNT(*) AS Transactions,\n  SUM(Amount) AS TotalRevenue, AVG(Amount) AS AvgAmount\nFROM Payment\nWHERE Status = 'Success'\nGROUP BY PaymentMethod\nHAVING TotalRevenue > 100\nORDER BY TotalRevenue DESC;", note: 'WHERE + GROUP BY + HAVING combined.' },
+    q16: { title: 'Top 5 Most Played Songs', sql: 'SELECT s.Title, ar.ArtistName, COUNT(lh.HistoryID) AS PlayCount\nFROM ListeningHistory lh\nJOIN Song s ON lh.SongID = s.SongID\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nGROUP BY s.SongID, s.Title, ar.ArtistName\nHAVING PlayCount >= 2\nORDER BY PlayCount DESC\nLIMIT 5;', note: 'Full pipeline: JOIN, GROUP BY, HAVING, ORDER BY, LIMIT.' },
+    q17: { title: 'Active Listeners', sql: 'SELECT u.Name, COUNT(DISTINCT lh.SongID) AS UniqueSongs\nFROM User u\nJOIN ListeningHistory lh ON u.UserID = lh.UserID\nGROUP BY u.UserID, u.Name\nHAVING UniqueSongs > 2\nORDER BY UniqueSongs DESC;', note: 'COUNT(DISTINCT) counts unique songs per user.' },
+    q18: { title: 'Avg Subscription Duration', sql: 'SELECT PlanType, COUNT(*) AS Total,\n  AVG(DATEDIFF(IFNULL(EndDate,CURDATE()), StartDate)) AS AvgDays\nFROM Subscription\nGROUP BY PlanType;', note: 'DATEDIFF + IFNULL + AVG + GROUP BY.' },
+    q19: { title: 'Premium Users', sql: "SELECT Name, Email FROM User\nWHERE UserID IN (\n  SELECT UserID FROM Subscription\n  WHERE PlanType = 'Premium' AND Status = 'Active'\n);", note: 'IN subquery - inner query returns list of UserIDs.' },
+    q20: { title: 'Songs Not in Any Playlist', sql: 'SELECT SongID, Title FROM Song\nWHERE SongID NOT IN (\n  SELECT DISTINCT SongID FROM Playlist_Song\n);', note: 'NOT IN subquery finds songs never added to any playlist.' },
+    q21: { title: 'Songs Longer than Average', sql: 'SELECT Title, Duration, ROUND(Duration/60,2) AS Minutes\nFROM Song\nWHERE Duration > (SELECT AVG(Duration) FROM Song)\nORDER BY Duration DESC;', note: 'Scalar subquery - inner SELECT returns single AVG value.' },
+    q22: { title: 'Artist with Most Songs', sql: 'SELECT ArtistName, TotalSongs FROM (\n  SELECT ar.ArtistName, COUNT(s.SongID) AS TotalSongs\n  FROM Artist ar\n  JOIN Album a ON ar.ArtistID = a.ArtistID\n  JOIN Song s ON a.AlbumID = s.AlbumID\n  GROUP BY ar.ArtistID, ar.ArtistName\n) AS t\nORDER BY TotalSongs DESC LIMIT 1;', note: 'Derived table - subquery in FROM clause.' },
+    q23: { title: 'Users with Failed Payment', sql: 'SELECT u.Name, u.Email FROM User u\nWHERE EXISTS (\n  SELECT 1 FROM Subscription sub\n  JOIN Payment p ON sub.SubscriptionID = p.SubscriptionID\n  WHERE sub.UserID = u.UserID AND p.Status = \'Failed\'\n);', note: 'EXISTS correlated subquery - returns TRUE on first match.' },
+    q24: { title: 'Max Payment per Plan', sql: 'SELECT sub.PlanType, p.Amount, p.PaymentDate\nFROM Payment p\nJOIN Subscription sub ON p.SubscriptionID = sub.SubscriptionID\nWHERE p.Amount = (\n  SELECT MAX(p2.Amount) FROM Payment p2\n  JOIN Subscription s2 ON p2.SubscriptionID = s2.SubscriptionID\n  WHERE s2.PlanType = sub.PlanType\n);', note: 'Correlated subquery - inner query references outer query.' },
+    q25: { title: 'Payment Aggregates', sql: "SELECT COUNT(*) AS Total, SUM(Amount) AS Revenue,\n  AVG(Amount) AS Avg, MAX(Amount) AS Max, MIN(Amount) AS Min\nFROM Payment WHERE Status = 'Success';", note: 'All 5 aggregate functions in one query.' },
+    q26: { title: 'User String and Date Functions', sql: "SELECT UPPER(Name), LOWER(Email), LENGTH(Name),\n  SUBSTRING(Email,1,LOCATE('@',Email)-1) AS Username,\n  DATEDIFF(CURDATE(),JoiningDate) AS DaysSinceJoining,\n  DATE_FORMAT(JoiningDate,'%d %M %Y') AS Formatted\nFROM User;", note: 'UPPER, LOWER, LENGTH, SUBSTRING, LOCATE, DATEDIFF, DATE_FORMAT.' },
+    q27: { title: 'Song Title Manipulation', sql: "SELECT Title,\n  CONCAT(Title,' (',ROUND(Duration/60,1),' min)') AS Display,\n  REPLACE(Title,' ','_') AS Slug\nFROM Song;", note: 'CONCAT builds display string. REPLACE creates URL slug.' },
+    q28: { title: 'Payment Date Functions', sql: 'SELECT PaymentID, PaymentDate,\n  YEAR(PaymentDate) AS Year,\n  MONTHNAME(PaymentDate) AS Month,\n  DAYNAME(PaymentDate) AS Day\nFROM Payment;', note: 'YEAR, MONTHNAME, DAYNAME date functions.' },
+    vw1: { title: 'Active Premium Users View', sql: "CREATE OR REPLACE VIEW vw_ActivePremiumUsers AS\nSELECT u.UserID, u.Name, u.Email, sub.PlanType, sub.StartDate, sub.EndDate\nFROM User u\nJOIN Subscription sub ON u.UserID = sub.UserID\nWHERE sub.PlanType = 'Premium' AND sub.Status = 'Active';\n\nSELECT * FROM vw_ActivePremiumUsers;", note: 'VIEW is a saved SELECT. Acts as virtual table.' },
+    vw2: { title: 'Song Details View', sql: "CREATE OR REPLACE VIEW vw_SongDetails AS\nSELECT s.SongID, s.Title, ROUND(s.Duration/60,2) AS Duration_Min,\n  IFNULL(a.AlbumName,'Single') AS Album,\n  IFNULL(ar.ArtistName,'Unknown') AS Artist,\n  GROUP_CONCAT(g.GenreName SEPARATOR ', ') AS Genres\nFROM Song s\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nLEFT JOIN Song_Genre sg ON s.SongID = sg.SongID\nLEFT JOIN Genre g ON sg.GenreID = g.GenreID\nGROUP BY s.SongID, s.Title, s.Duration, a.AlbumName, ar.ArtistName;\n\nSELECT * FROM vw_SongDetails;", note: 'Joins 5 tables + GROUP_CONCAT. Simple SELECT gives full song info.' },
+    vw3: { title: 'Revenue Summary View', sql: "CREATE OR REPLACE VIEW vw_RevenueSummary AS\nSELECT sub.PlanType, COUNT(p.PaymentID) AS Transactions,\n  SUM(p.Amount) AS TotalRevenue, AVG(p.Amount) AS AvgRevenue\nFROM Payment p\nJOIN Subscription sub ON p.SubscriptionID = sub.SubscriptionID\nWHERE p.Status = 'Success'\nGROUP BY sub.PlanType;\n\nSELECT * FROM vw_RevenueSummary;", note: 'Aggregation view for revenue reporting.' },
+    vw4: { title: 'User Playlist Summary View', sql: 'CREATE OR REPLACE VIEW vw_UserPlaylistSummary AS\nSELECT u.Name, COUNT(DISTINCT p.PlaylistID) AS TotalPlaylists,\n  COUNT(ps.SongID) AS TotalSongs\nFROM User u\nLEFT JOIN Playlist p ON u.UserID = p.UserID\nLEFT JOIN Playlist_Song ps ON p.PlaylistID = ps.PlaylistID\nGROUP BY u.UserID, u.Name;\n\nSELECT * FROM vw_UserPlaylistSummary;', note: 'LEFT JOIN ensures users with no playlists appear with 0 counts.' }
+};
+
+function openModal(id) {
+    var q = queries[id];
+    if (!q) return;
+    document.getElementById('modal-title').textContent = q.title;
+    document.getElementById('modal-sql').textContent = q.sql;
+    document.getElementById('modal-note').textContent = q.note;
+    document.getElementById('qmodal').classList.remove('hidden');
+}
+function closeModal() { document.getElementById('qmodal').classList.add('hidden'); }
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal')) e.target.classList.add('hidden');
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.querySelectorAll('.modal').forEach(function(m) { m.classList.add('hidden'); });
+});
+
+var sqlToastTimer = null;
+function showSQLToast(sql) {
+    var toast = document.getElementById('sql-toast');
+    if (!toast) return;
+    document.getElementById('sql-toast-code').textContent = sql;
+    toast.classList.add('show');
+    if (sqlToastTimer) clearTimeout(sqlToastTimer);
+    sqlToastTimer = setTimeout(function() { toast.classList.remove('show'); }, 6000);
+}
+
+function searchByArtist() {
+    var q = document.getElementById('inp-artist').value.trim();
+    if (!q) return;
+    showSQLToast("SELECT s.Title, a.AlbumName, ar.ArtistName, a.ReleaseYear\nFROM Song s\nJOIN Album a ON s.AlbumID = a.AlbumID\nJOIN Artist ar ON a.ArtistID = ar.ArtistID\nWHERE ar.ArtistName LIKE '%" + q + "%'\nORDER BY a.ReleaseYear;");
+    loadData('/api/songs/artist/' + encodeURIComponent(q), 'res-artist');
+}
+function searchByTitle() {
+    var q = document.getElementById('inp-song-title').value.trim();
+    if (!q) return;
+    showSQLToast("SELECT s.SongID, s.Title, ROUND(s.Duration/60,2) AS Duration_Min,\n  IFNULL(a.AlbumName,'Single') AS Album,\n  IFNULL(ar.ArtistName,'Unknown') AS Artist\nFROM Song s\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nWHERE s.Title LIKE '%" + q + "%';");
+    loadData('/api/songs/title/' + encodeURIComponent(q), 'res-song-title');
+}
+function getUserHistory() {
+    var id = document.getElementById('inp-userid').value.trim();
+    if (!id) return;
+    showSQLToast("SELECT u.Name, s.Title, ar.ArtistName, lh.PlayedAt\nFROM ListeningHistory lh\nJOIN User u ON lh.UserID = u.UserID\nJOIN Song s ON lh.SongID = s.SongID\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nWHERE lh.UserID = " + id + "\nORDER BY lh.PlayedAt DESC;");
+    loadData('/api/history/' + id, 'res-history');
+}
+function getUserSubscription() {
+    var id = document.getElementById('inp-sub-userid').value.trim();
+    if (!id) return;
+    showSQLToast("SELECT u.Name, u.Email, sub.PlanType, sub.Status,\n  p.Amount, p.PaymentMethod, p.PaymentDate\nFROM User u\nJOIN Subscription sub ON u.UserID = sub.UserID\nLEFT JOIN Payment p ON sub.SubscriptionID = p.SubscriptionID\nWHERE u.UserID = " + id + "\nORDER BY p.PaymentDate DESC;");
+    loadData('/api/user-subscription/' + id, 'res-subscription');
+}
+function getSongsByGenre() {
+    var g = document.getElementById('inp-genre').value;
+    if (!g) return;
+    showSQLToast("SELECT s.Title, ROUND(s.Duration/60,2) AS Duration_Min,\n  IFNULL(ar.ArtistName,'Unknown') AS Artist\nFROM Song s\nJOIN Song_Genre sg ON s.SongID = sg.SongID\nJOIN Genre g ON sg.GenreID = g.GenreID\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nWHERE g.GenreName = '" + g + "'\nORDER BY s.Title;");
+    loadData('/api/songs/genre/' + encodeURIComponent(g), 'res-genre');
+}
+function getTopSongs() {
+    var n = document.getElementById('inp-topn').value.trim() || '5';
+    showSQLToast("SELECT s.Title, ar.ArtistName, COUNT(lh.HistoryID) AS PlayCount\nFROM ListeningHistory lh\nJOIN Song s ON lh.SongID = s.SongID\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nGROUP BY s.SongID, s.Title, ar.ArtistName\nORDER BY PlayCount DESC\nLIMIT " + n + ";");
+    loadData('/api/top-songs/' + n, 'res-topsongs');
+}
+function getRevenue() {
+    var y = document.getElementById('inp-year').value.trim();
+    if (!y) return;
+    showSQLToast("SELECT MONTHNAME(PaymentDate) AS Month,\n  COUNT(*) AS Transactions, SUM(Amount) AS Revenue\nFROM Payment\nWHERE Status = 'Success' AND YEAR(PaymentDate) = " + y + "\nGROUP BY MONTH(PaymentDate), MONTHNAME(PaymentDate)\nORDER BY MONTH(PaymentDate);");
+    loadData('/api/revenue/year/' + y, 'res-revenue');
+}
+function getArtistsByCountry() {
+    var c = document.getElementById('inp-country').value;
+    if (!c) return;
+    showSQLToast("SELECT ar.ArtistID, ar.ArtistName, ar.Country,\n  COUNT(a.AlbumID) AS TotalAlbums\nFROM Artist ar\nLEFT JOIN Album a ON ar.ArtistID = a.ArtistID\nWHERE ar.Country LIKE '%" + c + "%'\nGROUP BY ar.ArtistID, ar.ArtistName, ar.Country;");
+    loadData('/api/artists/country/' + encodeURIComponent(c), 'res-country');
+}
+function getPlaylistsByUser() {
+    var id = document.getElementById('inp-playlist-user').value.trim();
+    if (!id) return;
+    showSQLToast("SELECT p.PlaylistID, p.PlaylistName, p.CreatedDate,\n  COUNT(ps.SongID) AS SongCount\nFROM Playlist p\nLEFT JOIN Playlist_Song ps ON p.PlaylistID = ps.PlaylistID\nWHERE p.UserID = " + id + "\nGROUP BY p.PlaylistID, p.PlaylistName, p.CreatedDate;");
+    loadData('/api/playlists/user/' + id, 'res-playlists-user');
+}
+function getSongsInPlaylist() {
+    var id = document.getElementById('inp-playlist-id').value.trim();
+    if (!id) return;
+    showSQLToast("SELECT s.Title, ROUND(s.Duration/60,2) AS Duration_Min,\n  IFNULL(ar.ArtistName,'Unknown') AS Artist, ps.AddedOn\nFROM Playlist_Song ps\nJOIN Song s ON ps.SongID = s.SongID\nLEFT JOIN Album a ON s.AlbumID = a.AlbumID\nLEFT JOIN Artist ar ON a.ArtistID = ar.ArtistID\nWHERE ps.PlaylistID = " + id + ";");
+    loadData('/api/playlist-songs/' + id, 'res-playlist-songs');
+}
+function getUsersByPlan() {
+    var p = document.getElementById('inp-plan').value;
+    if (!p) return;
+    showSQLToast("SELECT u.UserID, u.Name, u.Email, sub.PlanType, sub.Status\nFROM User u\nJOIN Subscription sub ON u.UserID = sub.UserID\nWHERE sub.PlanType = '" + p + "' AND sub.Status = 'Active'\nORDER BY u.Name;");
+    loadData('/api/users/plan/' + encodeURIComponent(p), 'res-plan');
+}
+function getAlbumsByYear() {
+    var y = document.getElementById('inp-album-year').value.trim();
+    if (!y) return;
+    showSQLToast("SELECT a.AlbumName, ar.ArtistName, a.ReleaseYear,\n  COUNT(s.SongID) AS TotalSongs\nFROM Album a\nJOIN Artist ar ON a.ArtistID = ar.ArtistID\nLEFT JOIN Song s ON a.AlbumID = s.AlbumID\nWHERE a.ReleaseYear = " + y + "\nGROUP BY a.AlbumID, a.AlbumName, ar.ArtistName, a.ReleaseYear;");
+    loadData('/api/albums/year/' + y, 'res-albums-year');
+}
+function joinByCountry() {
+    var c = document.getElementById('inp-join-country').value;
+    if (!c) return;
+    showSQLToast("SELECT s.Title, ROUND(s.Duration/60,2) AS Duration_Min,\n  ar.ArtistName, ar.Country, a.AlbumName\nFROM Song s\nINNER JOIN Album a ON s.AlbumID = a.AlbumID\nINNER JOIN Artist ar ON a.ArtistID = ar.ArtistID\nWHERE ar.Country LIKE '%" + c + "%'\nORDER BY ar.ArtistName;");
+    loadData('/api/join/songs-by-country/' + encodeURIComponent(c), 'res-joins');
+}
+function joinArtistAlbums() {
+    var n = document.getElementById('inp-min-albums').value.trim() || '1';
+    showSQLToast("SELECT ar.ArtistName, ar.Country,\n  COUNT(a.AlbumID) AS TotalAlbums\nFROM Artist ar\nJOIN Album a ON ar.ArtistID = a.ArtistID\nGROUP BY ar.ArtistID, ar.ArtistName, ar.Country\nHAVING TotalAlbums >= " + n + "\nORDER BY TotalAlbums DESC;");
+    loadData('/api/join/artist-albums/' + n, 'res-joins');
+}
+
+function addUser() {
+    var name = document.getElementById('add-user-name').value.trim();
+    var email = document.getElementById('add-user-email').value.trim();
+    var pass = document.getElementById('add-user-pass').value.trim();
+    var date = document.getElementById('add-user-date').value;
+    if (!name || !email || !pass) { document.getElementById('res-add-user').innerHTML = '<p class="msg-err">Please fill all required fields.</p>'; return; }
+    showSQLToast("INSERT INTO User (Name, Email, Password, JoiningDate)\nVALUES ('" + name + "', '" + email + "', 'hashed_pw', '" + (date || 'CURDATE()') + "');");
+    postData('/api/manage/add-user', { name: name, email: email, password: pass, date: date }, 'res-add-user');
+}
+function addArtist() {
+    var name = document.getElementById('add-artist-name').value.trim();
+    var country = document.getElementById('add-artist-country').value.trim();
+    if (!name) { document.getElementById('res-add-artist').innerHTML = '<p class="msg-err">Artist name is required.</p>'; return; }
+    showSQLToast("INSERT INTO Artist (ArtistName, Country)\nVALUES ('" + name + "', '" + (country || 'NULL') + "');");
+    postData('/api/manage/add-artist', { name: name, country: country }, 'res-add-artist');
+}
+function addSong() {
+    var title = document.getElementById('add-song-title').value.trim();
+    var dur = document.getElementById('add-song-duration').value.trim();
+    var album = document.getElementById('add-song-album').value.trim();
+    if (!title || !dur) { document.getElementById('res-add-song').innerHTML = '<p class="msg-err">Title and duration required.</p>'; return; }
+    showSQLToast("INSERT INTO Song (Title, Duration, AlbumID)\nVALUES ('" + title + "', " + dur + ", " + (album || 'NULL') + ");");
+    postData('/api/manage/add-song', { title: title, duration: parseInt(dur), albumId: album || null }, 'res-add-song');
+}
+function addPlaylist() {
+    var name = document.getElementById('add-pl-name').value.trim();
+    var uid = document.getElementById('add-pl-userid').value.trim();
+    if (!name || !uid) { document.getElementById('res-add-playlist').innerHTML = '<p class="msg-err">Name and User ID required.</p>'; return; }
+    showSQLToast("INSERT INTO Playlist (PlaylistName, CreatedDate, UserID)\nVALUES ('" + name + "', CURDATE(), " + uid + ");");
+    postData('/api/manage/add-playlist', { name: name, userId: parseInt(uid) }, 'res-add-playlist');
+}
+function addSongToPlaylist() {
+    var pid = document.getElementById('add-ps-playlist').value.trim();
+    var sid = document.getElementById('add-ps-song').value.trim();
+    if (!pid || !sid) { document.getElementById('res-add-ps').innerHTML = '<p class="msg-err">Both IDs required.</p>'; return; }
+    showSQLToast("INSERT INTO Playlist_Song (PlaylistID, SongID)\nVALUES (" + pid + ", " + sid + ");\n-- (duplicate check via stored procedure)");
+    postData('/api/manage/add-song-to-playlist', { playlistId: parseInt(pid), songId: parseInt(sid) }, 'res-add-ps');
+}
+function logPlay() {
+    var uid = document.getElementById('add-play-user').value.trim();
+    var sid = document.getElementById('add-play-song').value.trim();
+    if (!uid || !sid) { document.getElementById('res-log-play').innerHTML = '<p class="msg-err">Both IDs required.</p>'; return; }
+    showSQLToast("INSERT INTO ListeningHistory (UserID, SongID, PlayedAt)\nVALUES (" + uid + ", " + sid + ", NOW());");
+    postData('/api/manage/log-play', { userId: parseInt(uid), songId: parseInt(sid) }, 'res-log-play');
+}
+function updateSubscription() {
+    var uid = document.getElementById('upd-sub-user').value.trim();
+    var plan = document.getElementById('upd-sub-plan').value;
+    if (!uid) { document.getElementById('res-upd-sub').innerHTML = '<p class="msg-err">User ID required.</p>'; return; }
+    showSQLToast("UPDATE Subscription\nSET PlanType = '" + plan + "'\nWHERE UserID = " + uid + " AND Status = 'Active';");
+    postData('/api/manage/update-subscription', { userId: parseInt(uid), plan: plan }, 'res-upd-sub');
+}
+function updateArtistCountry() {
+    var aid = document.getElementById('upd-artist-id').value.trim();
+    var country = document.getElementById('upd-artist-country').value.trim();
+    if (!aid || !country) { document.getElementById('res-upd-artist').innerHTML = '<p class="msg-err">Both fields required.</p>'; return; }
+    showSQLToast("UPDATE Artist\nSET Country = '" + country + "'\nWHERE ArtistID = " + aid + ";");
+    postData('/api/manage/update-artist', { artistId: parseInt(aid), country: country }, 'res-upd-artist');
+}
+function deleteUser() {
+    var uid = document.getElementById('del-user-id').value.trim();
+    if (!uid) { document.getElementById('res-del-user').innerHTML = '<p class="msg-err">User ID required.</p>'; return; }
+    if (!confirm('Delete User ' + uid + '? This will also delete all their data.')) return;
+    showSQLToast("DELETE FROM User WHERE UserID = " + uid + ";\n-- ON DELETE CASCADE removes subscriptions,\n-- payments, playlists, and history automatically.");
+    deleteData('/api/manage/delete-user/' + uid, 'res-del-user');
+}
+function clearHistory() {
+    var uid = document.getElementById('del-history-user').value.trim();
+    if (!uid) { document.getElementById('res-del-history').innerHTML = '<p class="msg-err">User ID required.</p>'; return; }
+    showSQLToast("DELETE FROM ListeningHistory\nWHERE UserID = " + uid + ";");
+    deleteData('/api/manage/clear-history/' + uid, 'res-del-history');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var inputs = {
+        'inp-artist': searchByArtist,
+        'inp-song-title': searchByTitle,
+        'inp-userid': getUserHistory,
+        'inp-sub-userid': getUserSubscription,
+        'inp-topn': getTopSongs,
+        'inp-year': getRevenue,
+        'inp-playlist-user': getPlaylistsByUser,
+        'inp-playlist-id': getSongsInPlaylist,
+        'inp-album-year': getAlbumsByYear,
+        'inp-min-albums': joinArtistAlbums
+    };
+    Object.keys(inputs).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('keydown', function(e) { if (e.key === 'Enter') inputs[id](); });
+    });
+});
+</script>
+
+<div id="sql-toast">
+    <div id="sql-toast-header">SQL Query Executed</div>
+    <pre id="sql-toast-code"></pre>
+    <button onclick="document.getElementById('sql-toast').classList.remove('show')">close</button>
+</div>
+
+</body>
+</html>
