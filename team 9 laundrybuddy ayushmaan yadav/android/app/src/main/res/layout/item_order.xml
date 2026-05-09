@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Blue Bar -->
+        <View
+            android:id="@+id/accentBar"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:background="#2196F3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Content Container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:layout_constraintStart_toEndOf="@id/accentBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Order Index -->
+            <TextView
+                android:id="@+id/orderNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ORD123456"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Date -->
+            <TextView
+                android:id="@+id/orderDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="31/01/2026"
+                android:textSize="12sp"
+                android:textColor="#9E9E9E"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/orderNumber"
+                app:layout_constraintBottom_toBottomOf="@id/orderNumber" />
+
+            <!-- Items Summary -->
+            <TextView
+                android:id="@+id/itemsSummary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="2 Shirts, 1 Pant"
+                android:textSize="14sp"
+                android:textColor="#757575"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/orderNumber" />
+
+            <!-- Status Text -->
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submitted"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#2196F3"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/itemsSummary" />
+
+            <!-- Rate Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rateButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rate Order"
+                android:textColor="#FF9800"
+                app:strokeColor="#FF9800"
+                app:strokeWidth="1dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/statusText"
+                app:layout_constraintTop_toTopOf="@id/statusText" />
+
+            <!-- Rating Display -->
+             <TextView
+                android:id="@+id/ratingDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="★ 5.0"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#FF9800"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/statusText"
+                app:layout_constraintTop_toTopOf="@id/statusText"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

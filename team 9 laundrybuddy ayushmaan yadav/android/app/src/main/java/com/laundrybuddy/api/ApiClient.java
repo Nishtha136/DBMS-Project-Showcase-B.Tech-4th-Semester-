@@ -1,0 +1,180 @@
+package com.laundrybuddy.api;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.laundrybuddy.BuildConfig;
+
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.JavaNetCookieJar;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * Singleton API client using Retrofit
+ * Handles cookie-based session authentication
+ */
+public class ApiClient {
+
+    private static final String TAG = "ApiClient";
+    private static ApiClient instance;
+    private static volatile boolean isLoggingOut = false;
+
+    private final Retrofit retrofit;
+    private final AuthApi authApi;
+    private final OrderApi orderApi;
+    private final TrackingApi trackingApi;
+    private final SupportApi supportApi;
+    private final AdminApi adminApi;
+
+    private ApiClient(Context context) {
+        // Cookie manager for session handling
+        CookieManager cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+
+        // Logging interceptor for debugging
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.d(TAG, message));
+        loggingInterceptor.setLevel(BuildConfig.DEBUG
+                ? HttpLoggingInterceptor.Level.BODY
+                : HttpLoggingInterceptor.Level.NONE);
+
+        // OkHttp client with cookie jar and timeouts
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .cookieJar(new JavaNetCookieJar(cookieManager))
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(chain -> {
+                    okhttp3.Request original = chain.request();
+                    String token = com.laundrybuddy.LaundryBuddyApp.getInstance().getAuthToken();
+                    android.util.Log.d("ApiClient", "Interceptor Check. Token: " + token);
+
+                    if (token != null && !token.isEmpty()) {
+                        okhttp3.Request request = original.newBuilder()
+                                .header("Authorization", "Bearer " + token)
+                                .method(original.method(), original.body())
+                                .build();
+                        return chain.proceed(request);
+                    }
+                    return chain.proceed(original);
+                })
+                // Intercept 401 responses to handle expired/invalid tokens
+                .addInterceptor(chain -> {
+                    okhttp3.Request request = chain.request();
+                    okhttp3.Response response = chain.proceed(request);
+
+                    if (response.code() == 401) {
+                        // Skip auto-logout for auth-related endpoints
+                        // (login, register, logout, etc. can legitimately return 401)
+                        String url = request.url().toString();
+                        boolean isAuthEndpoint = url.contains("auth/login")
+                                || url.contains("auth/register")
+                                || url.contains("auth/logout")
+                                || url.contains("auth/google")
+                                || url.contains("auth/forgot-password")
+                                || url.contains("auth/me")
+                                || url.contains("auth/check");
+
+                        if (!isAuthEndpoint && !isLoggingOut) {
+                            Log.w(TAG, "Received 401 on protected endpoint - token expired: " + url);
+                            isLoggingOut = true;
+                            // Clear auth on main thread and redirect to login
+                            android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+                            mainHandler.post(() -> {
+                                try {
+                                    com.laundrybuddy.LaundryBuddyApp app = com.laundrybuddy.LaundryBuddyApp
+                                            .getInstance();
+                                    if (app != null && app.isLoggedIn()) {
+                                        app.clearAuth();
+                                        android.content.Intent intent = new android.content.Intent(app,
+                                                com.laundrybuddy.ui.auth.LoginActivity.class);
+                                        intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+                                                | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.putExtra("session_expired", true);
+                                        app.startActivity(intent);
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Error handling 401 redirect", e);
+                                } finally {
+                                    isLoggingOut = false;
+                                }
+                            });
+                        }
+                    }
+                    return response;
+                })
+                .connectTimeout(90, TimeUnit.SECONDS)
+                .readTimeout(90, TimeUnit.SECONDS)
+                .writeTimeout(90, TimeUnit.SECONDS)
+                // Retry on connection failure (handles Render cold starts)
+                .retryOnConnectionFailure(true)
+                .build();
+
+        // Custom Gson with UserFieldAdapter to handle user field as String or Object
+        com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                .registerTypeAdapter(com.laundrybuddy.models.Order.PopulatedUser.class,
+                        new com.laundrybuddy.models.UserFieldAdapter())
+                .create();
+
+        // Retrofit instance
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_BASE_URL + "/")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        // Create API interfaces
+        authApi = retrofit.create(AuthApi.class);
+        orderApi = retrofit.create(OrderApi.class);
+        trackingApi = retrofit.create(TrackingApi.class);
+        supportApi = retrofit.create(SupportApi.class);
+        adminApi = retrofit.create(AdminApi.class);
+
+        Log.d(TAG, "API Client initialized with base URL: " + BuildConfig.API_BASE_URL);
+    }
+
+    public static synchronized void init(Context context) {
+        if (instance == null) {
+            instance = new ApiClient(context.getApplicationContext());
+        }
+    }
+
+    public static ApiClient getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException(
+                    "ApiClient must be initialized first. Call init() in Application.onCreate()");
+        }
+        return instance;
+    }
+
+    public AuthApi getAuthApi() {
+        return authApi;
+    }
+
+    public OrderApi getOrderApi() {
+        return orderApi;
+    }
+
+    public TrackingApi getTrackingApi() {
+        return trackingApi;
+    }
+
+    public SupportApi getSupportApi() {
+        return supportApi;
+    }
+
+    public AdminApi getAdminApi() {
+        return adminApi;
+    }
+
+    public Retrofit getRetrofit() {
+        return retrofit;
+    }
+
+    public static String getBaseUrl() {
+        return BuildConfig.API_BASE_URL;
+    }
+}

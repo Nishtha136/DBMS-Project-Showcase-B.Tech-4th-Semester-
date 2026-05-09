@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--
+ ============================================================================
+ LAUNDRY BUDDY - Smart Laundry Management System
+ ============================================================================
+ @project   Laundry Buddy
+ @author    Ayush
+ @status    Production Ready
+ @description Frontend View Template.
+ ============================================================================
+-->
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Laundry - Laundry Buddy</title>
+    <link rel="stylesheet" href="submit.css?v=2.0">
+    <link rel="stylesheet" href="modal.css?v=2.0">
+    <link rel="stylesheet" href="dark-mode.css?v=2.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="responsive.css?v=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+    <header>
+        <div class="container navbar">
+            <a href="home.html" class="logo">
+                <i class='bx bxs-washer'></i>
+                <span>Laundry Buddy</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="submit.html" class="active">Submit Laundry</a></li>
+                    <li><a href="track.html">Track Laundry</a></li>
+                    <li><a href="history.html">History</a></li>
+                    <li><a href="support.html">Support</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                <i class='bx bx-sun'></i>
+                <span class="theme-toggle-slider"></span>
+                <i class='bx bx-moon'></i>
+            </button>
+            <div class="header-actions">
+                <a href="profile.html"><img src="assests/profile.png" alt="User Profile"></a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <div class="form-image-wrapper">
+                <img src="assests/submit.png" alt="Washing Machine">
+            </div>
+
+            <h2>Submit Laundry</h2>
+
+            <div class="progress-step">
+                <p>Step 1 of 3</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <form action="#" method="POST">
+                <div class="input-group">
+                    <label for="clothes-count">Clothes Count</label>
+                    <input type="number" id="clothes-count" placeholder="Enter number of clothes">
+                </div>
+
+                <div class="input-group">
+                    <label for="clothes-type">Clothes Type</label>
+                    <select id="clothes-type">
+                        <option value="" disabled selected>Select type</option>
+                        <option value="regular">Regular Wear</option>
+                        <option value="delicates">Delicates</option>
+                        <option value="bedding">Bedding & Linens</option>
+                        <option value="heavy">Heavy Duty (Jeans, Jackets)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="special-notes">Special Notes</label>
+                    <textarea id="special-notes" rows="4" placeholder="Any special instructions..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- QR Code Modal -->
+    <div id="qr-code-modal">
+        <div class="modal-content">
+            <button id="close-qr-modal" aria-label="Close modal">&times;</button>
+            <h2>🎉 Laundry Submitted!</h2>
+            <div id="qr-code-container"></div>
+            <p id="token-display"></p>
+            <p class="qr-instructions">Scan this QR code to track your laundry</p>
+            <div class="button-group">
+                <button id="download-qr">
+                    <i class='bx bx-download'></i> Download QR
+                </button>
+                <button id="track-now">
+                    <i class='bx bx-search'></i> Track Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include QRCode.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- Backend Integration Scripts -->
+    <script src="assests/api-config.js"></script>
+    <script src="assests/idb-utils.js"></script>
+    <script src="assests/order-api.js"></script>
+
+    <!-- Existing Scripts -->
+    <script src="assests/crypto-utils.js"></script>
+    <script src="assests/auth.js"></script>
+    <script src="assests/dark-mode.js"></script>
+    <script src="assests/mobile-menu.js"></script>
+    <script src="assests/keyboard-shortcuts.js"></script>
+    <script src="assests/submit.js?v=2.0"></script>
+
+</body>
+
+</html>

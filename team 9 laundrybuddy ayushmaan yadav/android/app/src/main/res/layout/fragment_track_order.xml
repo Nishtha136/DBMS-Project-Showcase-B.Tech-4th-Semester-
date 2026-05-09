@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Track Your Laundry"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Input Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/searchLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:hint="Enter Order Number"
+                app:boxBackgroundColor="@android:color/transparent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/searchInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTrack"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:text="Track"
+                android:textColor="@android:color/white"
+                app:backgroundTint="#E67E22"
+                app:cornerRadius="8dp" />
+
+        </LinearLayout>
+        
+        <!-- Action Buttons Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/scanButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="Scan QR Code"
+                android:textColor="@color/text_primary"
+                app:icon="@android:drawable/ic_menu_camera"
+                app:iconTint="@color/text_primary"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                app:strokeColor="#E0E0E0"
+                app:cornerRadius="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShowQr"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="Show My QR"
+                android:textColor="@android:color/white"
+                app:icon="@android:drawable/ic_menu_view"
+                app:iconTint="@android:color/white"
+                app:backgroundTint="#E67E22"
+                app:cornerRadius="8dp"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+        <!-- Order Details Section (Hidden initially) -->
+        <LinearLayout
+            android:id="@+id/orderDetailsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Laundry Status"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/statusHeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submitted - Estimated Completion: 5:30 AM"
+                android:textColor="#2196F3"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Grey Info Card -> Now White Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E0E0E0">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Token: "
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <TextView
+                            android:id="@+id/detailOrderNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_secondary"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Items: "
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <TextView
+                            android:id="@+id/detailItems"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_secondary"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Latest Update: "
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <TextView
+                            android:id="@+id/detailLastUpdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_secondary"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Special Instructions: "
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <TextView
+                            android:id="@+id/detailInstructions"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_secondary"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Progress Bar -->
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/orderProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                app:indicatorColor="#2196F3"
+                app:trackColor="#E0E0E0"
+                app:trackThickness="8dp"
+                app:trackCornerRadius="4dp"/>
+            
+            <!-- Notify Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNotify"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Notify Me When Ready"
+                android:textColor="@android:color/white"
+                app:backgroundTint="#E67E22"
+                app:cornerRadius="8dp" />
+
+        </LinearLayout>
+
+        <!-- Empty State -->
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="24dp">
+            <TextView
+                android:text="No submissions found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <ProgressBar
+            android:id="@+id/loadingProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- My Submissions Section -->
+        <TextView
+            android:id="@+id/submissionsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Submissions"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recentOrdersRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp" 
+            android:nestedScrollingEnabled="false" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+

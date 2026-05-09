@@ -1,0 +1,52 @@
+services:
+  # Backend API Service
+  - type: web
+    name: laundry-buddy-backend
+    env: node
+    rootDir: backend
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: "20.19.0"
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false  # Paste your Supabase connection string here
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: ALLOWED_ORIGINS
+        sync: false  # Add frontend URL here after deployment
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+    healthCheckPath: /api/health
+
+  # Frontend Static Site
+  - type: static
+    name: laundry-buddy-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: ""
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+# After deploying:
+# 1. Get your Supabase DATABASE_URL from: Dashboard → Settings → Database → Connection string
+# 2. Paste it in the DATABASE_URL env var on Render
+# 3. Update ALLOWED_ORIGINS with your Frontend URL
+# 4. Update API URL in frontend/assests/api-config.js with Backend URL
